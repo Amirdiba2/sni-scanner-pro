@@ -1,0 +1,2883 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes, viewport-fit=cover">
+    <meta name="theme-color" content="#0a1628">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>SNI Scanner Pro v1.0.2 — اسکنر حرفه‌ای شبکه</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================================
+           ROOT VARIABLES – طراحی شیک، بالغ و بهینه
+           ============================================================ */
+        :root {
+            --bg: #0a0f1e;
+            --bg-panel: rgba(12, 20, 36, 0.88);
+            --card-bg: rgba(18, 28, 50, 0.78);
+            --card-hover: rgba(28, 42, 72, 0.92);
+            --input-bg: rgba(22, 34, 60, 0.80);
+            --border: rgba(60, 90, 150, 0.40);
+            --border-light: rgba(80, 110, 180, 0.25);
+            --text: #eef2fc;
+            --text-secondary: #9ab0d8;
+            --text-muted: #5a7a9a;
+            --accent: #00b8ff;
+            --accent-glow: #4ac8ff;
+            --accent-soft: rgba(0, 184, 255, 0.10);
+            --danger: #ff4d6d;
+            --danger-soft: rgba(255, 77, 109, 0.10);
+            --warning: #f7c948;
+            --warning-soft: rgba(247, 201, 72, 0.10);
+            --success: #00d4a0;
+            --success-soft: rgba(0, 212, 160, 0.10);
+            --purple: #a78bfa;
+            --radius: 16px;
+            --radius-lg: 24px;
+            --radius-sm: 8px;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.40);
+            --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.55);
+            --glass-blur: 20px;
+            --font: 'Vazirmatn', system-ui, sans-serif;
+            --mono: 'JetBrains Mono', monospace;
+            --anim: 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            --anim-slow: 0.40s cubic-bezier(0.34, 1.56, 0.64, 1);
+            --table-density: 1;
+            --header-h: 60px;
+            --touch-target: 44px;
+        }
+
+        body.light {
+            --bg: #eef2f8;
+            --bg-panel: rgba(240, 244, 250, 0.88);
+            --card-bg: rgba(255, 255, 255, 0.84);
+            --card-hover: rgba(255, 255, 255, 0.95);
+            --input-bg: rgba(240, 244, 250, 0.80);
+            --border: rgba(160, 180, 210, 0.50);
+            --border-light: rgba(180, 200, 230, 0.40);
+            --text: #0a1a2a;
+            --text-secondary: #3a5a7a;
+            --text-muted: #6a8aaa;
+            --shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.10);
+            --accent-soft: rgba(0, 160, 220, 0.06);
+            --danger-soft: rgba(220, 50, 70, 0.06);
+            --warning-soft: rgba(200, 160, 30, 0.06);
+            --success-soft: rgba(0, 190, 140, 0.06);
+        }
+
+        /* کاهش سنگینی در موبایل و دسکتاپ */
+        @media (max-width: 768px) {
+            :root {
+                --glass-blur: 8px;
+                --shadow: 0 4px 16px rgba(0, 0, 0, 0.30);
+                --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.40);
+            }
+            body { background-image: none !important; }
+            .glass {
+                backdrop-filter: blur(var(--glass-blur));
+                -webkit-backdrop-filter: blur(var(--glass-blur));
+            }
+        }
+        @media (min-width: 769px) {
+            :root { --glass-blur: 12px; }
+            .glass {
+                backdrop-filter: blur(var(--glass-blur));
+                -webkit-backdrop-filter: blur(var(--glass-blur));
+            }
+        }
+
+        /* Reset & Base */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; -webkit-touch-callout: none; }
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 8px;
+            transition: background var(--anim), color var(--anim);
+            display: flex;
+            flex-direction: column;
+            background-image: radial-gradient(ellipse at 10% 20%, rgba(0, 180, 255, 0.03) 0%, transparent 50%),
+                              radial-gradient(ellipse at 90% 80%, rgba(167, 139, 250, 0.02) 0%, transparent 45%);
+            background-attachment: fixed;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.5;
+            will-change: auto;
+        }
+        body.light {
+            background-image: radial-gradient(ellipse at 10% 20%, rgba(0, 160, 210, 0.02) 0%, transparent 50%),
+                              radial-gradient(ellipse at 90% 80%, rgba(130, 60, 210, 0.015) 0%, transparent 45%);
+        }
+        @media (max-width: 768px) { body { background-image: none !important; } }
+
+        body.modal-open { overflow: hidden; position: fixed; width: 100%; height: 100%; }
+
+        .mono { font-family: var(--mono); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+        /* ============================================================
+           GLASS & CARDS
+           ============================================================ */
+        .glass {
+            background: var(--card-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: background var(--anim), border-color var(--anim), box-shadow var(--anim), transform 0.12s ease;
+            will-change: transform, box-shadow;
+            transform: translateZ(0);
+        }
+        .glass:hover { box-shadow: var(--shadow-lg); }
+
+        /* ============================================================
+           LAYOUT
+           ============================================================ */
+        .app-container { max-width: 1440px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 10px; }
+
+        /* ============================================================
+           HEADER
+           ============================================================ */
+        .header {
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
+            gap: 6px; padding: 8px 16px; border-radius: var(--radius-lg);
+            min-height: var(--header-h);
+            background: var(--bg-panel);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--border);
+        }
+        .logo-group { display: flex; align-items: center; gap: 10px; }
+        .logo-icon {
+            width: 40px; height: 40px; border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; color: #fff;
+            box-shadow: 0 0 30px rgba(0, 184, 255, 0.20);
+            animation: logoPulse 4s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+        @keyframes logoPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 184, 255, 0.20); }
+            50% { box-shadow: 0 0 40px rgba(0, 184, 255, 0.40); }
+        }
+        .logo-text {
+            font-size: 1.05rem; font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-glow), var(--accent), var(--purple));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            letter-spacing: -0.02em; line-height: 1.2;
+        }
+        .logo-sub { font-size: 0.55rem; color: var(--text-muted); font-weight: 400; -webkit-text-fill-color: var(--text-muted); }
+        .version-badge {
+            display: inline-flex; align-items: center; gap: 4px;
+            background: var(--accent-soft); border: 1.5px solid var(--accent);
+            color: var(--accent-glow); padding: 3px 10px; border-radius: 30px;
+            font-size: 0.60rem; font-weight: 700; font-family: var(--mono);
+            box-shadow: 0 0 16px rgba(0, 184, 255, 0.08);
+            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+            white-space: nowrap;
+        }
+        .header-controls { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+        .sensor-box {
+            display: flex; align-items: center; gap: 5px; font-size: 0.65rem;
+            padding: 4px 12px; border-radius: 30px;
+            border: 1px solid var(--border-light); background: var(--input-bg);
+            font-weight: 500; transition: all var(--anim);
+            white-space: nowrap; min-height: var(--touch-target);
+        }
+        .sensor-dot {
+            width: 9px; height: 9px; border-radius: 50%;
+            flex-shrink: 0; transition: all var(--anim);
+        }
+        .sensor-dot.online { background: var(--success); box-shadow: 0 0 12px var(--success); animation: pulse-dot 2s ease-in-out infinite; }
+        .sensor-dot.restricted { background: var(--warning); box-shadow: 0 0 12px var(--warning); animation: pulse-dot 2s ease-in-out infinite; }
+        .sensor-dot.offline { background: var(--danger); box-shadow: 0 0 12px var(--danger); }
+        @keyframes pulse-dot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.15); } }
+        .icon-btn {
+            background: var(--input-bg); border: 1px solid var(--border-light); color: var(--text);
+            width: var(--touch-target); height: var(--touch-target);
+            border-radius: var(--radius-sm); font-size: 0.9rem;
+            cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+            transition: all 0.15s ease; will-change: transform; flex-shrink: 0;
+            touch-action: manipulation;
+        }
+        .icon-btn:hover { background: var(--accent-soft); border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.20); }
+        .icon-btn:active { transform: scale(0.92); }
+
+        /* ============================================================
+           STATS ROW
+           ============================================================ */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+            gap: 6px;
+        }
+        .stat-card {
+            padding: 10px 4px;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+            border-radius: var(--radius); transition: all 0.20s ease;
+            position: relative; overflow: hidden; cursor: default; min-height: 68px;
+        }
+        .stat-card::after {
+            content: ''; position: absolute; bottom: 0; left: 25%; right: 25%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0; transition: opacity var(--anim);
+        }
+        .stat-card:hover::after { opacity: 1; }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); background: var(--card-hover); }
+        .stat-icon { font-size: 1.1rem; margin-bottom: 2px; }
+        .stat-value { font-size: 0.95rem; color: var(--accent-glow); font-weight: 700; font-family: var(--mono); }
+        .stat-label { font-size: 0.48rem; color: var(--text-muted); margin-top: 2px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+
+        /* ============================================================
+           REPO ROW
+           ============================================================ */
+        .repo-row {
+            display: flex; flex-wrap: wrap; gap: 5px; align-items: center;
+            padding: 6px 12px; border-radius: var(--radius);
+        }
+        .repo-row .section-label { font-size: 0.65rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
+        .repo-chip {
+            display: flex; align-items: center; gap: 4px; padding: 5px 12px; border-radius: 30px;
+            font-size: 0.65rem; font-weight: 500; cursor: pointer;
+            border: 1.5px solid var(--border-light); background: var(--input-bg);
+            transition: all 0.18s ease; user-select: none; white-space: nowrap;
+            font-family: var(--font); will-change: transform; min-height: var(--touch-target);
+            touch-action: manipulation;
+        }
+        .repo-chip.checked { background: var(--accent); border-color: var(--accent); color: #fff; box-shadow: 0 0 20px rgba(0,184,255,0.25); font-weight: 600; }
+        .repo-chip:hover { border-color: var(--accent-glow); transform: translateY(-2px); }
+        .repo-chip:active { transform: scale(0.94); }
+        .repo-action-btn {
+            margin-right: auto; font-size: 0.65rem; padding: 5px 14px; border-radius: 30px;
+            background: var(--input-bg); border: 1.5px solid var(--border-light); color: var(--text);
+            cursor: pointer; font-family: var(--font); font-weight: 500;
+            transition: all 0.18s ease; white-space: nowrap; min-height: var(--touch-target);
+            display: inline-flex; align-items: center; gap: 4px; touch-action: manipulation;
+        }
+        .repo-action-btn:hover { background: var(--accent-soft); border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+        .repo-action-btn:active { transform: scale(0.94); }
+        .repo-hint { font-size: 0.52rem; color: var(--text-muted); width: 100%; text-align: center; margin-top: 2px; opacity: 0.6; }
+
+        /* ============================================================
+           SLIDERS
+           ============================================================ */
+        .sliders-row {
+            display: flex; flex-wrap: wrap; gap: 12px; padding: 8px 12px; border-radius: var(--radius);
+        }
+        .slider-group {
+            display: flex; align-items: center; gap: 8px; flex: 1 1 140px; min-width: 120px;
+        }
+        .slider-group label { font-size: 0.65rem; white-space: nowrap; font-weight: 500; color: var(--text-secondary); }
+        input[type="range"] {
+            flex: 1; height: 5px; border-radius: 4px; background: var(--border);
+            -webkit-appearance: none; appearance: none; cursor: pointer;
+            transition: background 0.15s ease; min-width: 60px; touch-action: none;
+        }
+        input[type="range"]:hover { background: var(--border-light); }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%;
+            background: var(--accent); box-shadow: 0 0 18px var(--accent), 0 2px 8px rgba(0,0,0,0.25);
+            cursor: pointer; transition: all 0.15s ease; border: 2px solid #fff;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.1); box-shadow: 0 0 28px var(--accent-glow), 0 4px 12px rgba(0,0,0,0.35); }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px; height: 20px; border-radius: 50%; background: var(--accent); border: 2px solid #fff; cursor: pointer;
+        }
+        .slider-value { font-size: 0.70rem; min-width: 30px; text-align: center; font-weight: 600; color: var(--accent-glow); font-family: var(--mono); white-space: nowrap; }
+
+        /* ============================================================
+           ACTION BUTTONS
+           ============================================================ */
+        .actions {
+            display: flex; flex-wrap: wrap; gap: 5px;
+        }
+        .actions button {
+            background: var(--input-bg); border: 1.5px solid var(--border-light); color: var(--text);
+            padding: 6px 12px; border-radius: 30px; font-size: 0.65rem; font-weight: 600;
+            cursor: pointer; transition: all 0.18s ease; display: inline-flex; align-items: center;
+            gap: 4px; font-family: var(--font); white-space: nowrap; will-change: transform;
+            min-height: var(--touch-target); touch-action: manipulation;
+        }
+        .actions button:hover { background: var(--card-hover); border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+        .actions button:active { transform: scale(0.93); }
+        .btn-primary { background: var(--accent) !important; border-color: var(--accent) !important; color: #fff !important; font-weight: 700 !important; box-shadow: 0 0 24px rgba(0,184,255,0.25) !important; }
+        .btn-primary:hover { background: #00a8e6 !important; box-shadow: 0 0 36px rgba(0,184,255,0.40) !important; }
+        .btn-danger { background: var(--danger-soft) !important; border-color: var(--danger) !important; color: var(--danger) !important; }
+        .btn-danger:hover { background: var(--danger) !important; color: #fff !important; }
+        .btn-ghost { background: transparent !important; border-color: transparent !important; }
+        .btn-ghost:hover { background: var(--input-bg) !important; border-color: var(--border-light) !important; }
+        .btn-success { background: var(--success-soft) !important; border-color: var(--success) !important; color: var(--success) !important; }
+        .btn-success:hover { background: var(--success) !important; color: #fff !important; }
+
+        /* ============================================================
+           PROGRESS
+           ============================================================ */
+        .progress-wrap { margin-bottom: 4px; padding: 2px 0; }
+        .progress-track { height: 6px; background: var(--border); border-radius: 20px; overflow: hidden; box-shadow: inset 0 1px 4px rgba(0,0,0,0.25); }
+        .progress-fill {
+            width: 0%; height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-glow), var(--purple));
+            background-size: 200% 100%; border-radius: 20px;
+            transition: width 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: shimmer 2.5s linear infinite; will-change: width;
+        }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        /* ============================================================
+           TABLE TOOLBAR
+           ============================================================ */
+        .table-toolbar {
+            display: flex; flex-wrap: wrap; gap: 5px; align-items: center; padding: 4px 0;
+        }
+        .table-toolbar .search-input,
+        .table-toolbar .toolbar-select {
+            background: var(--input-bg); border: 1.5px solid var(--border-light); border-radius: 30px;
+            padding: 6px 12px; color: var(--text); flex: 1 1 120px;
+            font-family: var(--font); font-size: 0.65rem; transition: all 0.18s ease;
+            min-width: 90px; min-height: var(--touch-target);
+        }
+        .table-toolbar .search-input:focus,
+        .table-toolbar .toolbar-select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+        .table-toolbar .search-input::placeholder { color: var(--text-muted); opacity: 0.7; }
+        .table-toolbar .toolbar-select {
+            cursor: pointer; appearance: none; -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ab0d8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: left 12px center; padding-left: 32px;
+        }
+        .table-toolbar .toolbar-btn {
+            padding: 6px 12px; border-radius: 30px; font-size: 0.62rem; font-weight: 500;
+            cursor: pointer; background: var(--input-bg); border: 1.5px solid var(--border-light);
+            color: var(--text); font-family: var(--font); transition: all 0.18s ease;
+            white-space: nowrap; min-height: var(--touch-target); display: inline-flex;
+            align-items: center; gap: 3px; touch-action: manipulation;
+        }
+        .table-toolbar .toolbar-btn:hover { border-color: var(--accent); background: var(--accent-soft); transform: translateY(-2px); }
+
+        /* ============================================================
+           TABLE
+           ============================================================ */
+        .table-wrap {
+            max-height: 420px; overflow-y: auto; border-radius: var(--radius);
+            flex: 1; background: var(--card-bg); border: 1px solid var(--border);
+            scroll-behavior: smooth; -webkit-overflow-scrolling: touch;
+            will-change: scroll-position; transform: translateZ(0);
+        }
+        .table-wrap::-webkit-scrollbar { width: 5px; }
+        .table-wrap::-webkit-scrollbar-track { background: transparent; border-radius: 10px; }
+        .table-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+        .table-wrap::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+        table { width: 100%; border-collapse: collapse; font-size: calc(0.64rem * var(--table-density)); }
+        thead th {
+            position: sticky; top: 0; background: var(--card-bg); z-index: 3;
+            padding: 8px 6px; text-align: right; color: var(--accent-glow);
+            border-bottom: 2px solid var(--accent); font-weight: 700; font-size: 0.60rem;
+            text-transform: uppercase; letter-spacing: 0.05em;
+            backdrop-filter: blur(var(--glass-blur)); -webkit-backdrop-filter: blur(var(--glass-blur));
+            white-space: nowrap;
+        }
+        tbody tr { transition: background 0.15s ease; will-change: background; }
+        tbody tr:nth-child(even) { background: rgba(255, 255, 255, 0.02); }
+        tbody tr:hover { background: rgba(0, 184, 255, 0.05); }
+        tbody td {
+            padding: calc(6px * var(--table-density)) calc(4px * var(--table-density));
+            border-bottom: 1px solid var(--border-light); vertical-align: middle;
+            font-size: calc(0.60rem * var(--table-density)); white-space: nowrap;
+        }
+        tbody td:first-child { white-space: normal; word-break: break-all; max-width: 120px; }
+        .badge {
+            padding: 2px 10px; border-radius: 30px; font-size: 0.50rem; font-weight: 700;
+            display: inline-block; white-space: nowrap; letter-spacing: 0.03em; text-transform: uppercase;
+        }
+        .badge.online { background: #0b4d2c; color: #6fe8a8; }
+        .badge.unstable { background: #5a4416; color: #fde047; }
+        .badge.poor { background: #682121; color: #fca5a5; }
+        .badge.offline { background: #3b1818; color: #f87171; }
+        .badge.filtered { background: #361a6b; color: #c4b5fd; }
+        .badge.stable { background: #0b4d2c; color: #6fe8a8; }
+        .badge.mostly-stable { background: #5a4416; color: #fde047; }
+        .badge.unstable-badge { background: #682121; color: #fca5a5; }
+
+        .copy-btn, .row-select, .row-detail-btn {
+            background: transparent; border: none; color: var(--text-muted);
+            font-size: 0.70rem; cursor: pointer; padding: 2px 6px; border-radius: 6px;
+            transition: all 0.18s ease; opacity: 0.4; min-height: 30px; min-width: 30px;
+            display: inline-flex; align-items: center; justify-content: center;
+            touch-action: manipulation;
+        }
+        tr:hover .copy-btn, tr:hover .row-select, tr:hover .row-detail-btn { opacity: 1; }
+        .copy-btn:hover, .row-select:hover, .row-detail-btn:hover { color: var(--accent-glow); background: rgba(255,255,255,0.06); }
+
+        /* ============================================================
+           CHART SECTION
+           ============================================================ */
+        .chart-section {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+        }
+        .chart-card {
+            padding: 10px 12px; border-radius: var(--radius); min-height: 100px; display: flex; flex-direction: column;
+        }
+        .chart-card h4 { font-size: 0.65rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; letter-spacing: 0.04em; display: flex; align-items: center; gap: 6px; }
+        .chart-card canvas { width: 100% !important; height: 75px !important; border-radius: var(--radius-sm); background: var(--input-bg); display: block; }
+        @media (max-width: 640px) { .chart-section { grid-template-columns: 1fr; gap: 8px; } .chart-card canvas { height: 60px !important; } }
+
+        /* ============================================================
+           TOAST – FIXED BOTTOM
+           ============================================================ */
+        .toast-container {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            z-index: 9999; display: flex; flex-direction: column; align-items: center;
+            gap: 5px; pointer-events: none; width: 92%; max-width: 420px;
+        }
+        .toast {
+            padding: 10px 16px; border-radius: 30px; font-size: 0.70rem; font-weight: 600;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+            animation: toastIn 0.30s cubic-bezier(0.34, 1.56, 0.64, 1), toastOut 0.25s 2.8s forwards;
+            pointer-events: auto; width: 100%; text-align: center;
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            letter-spacing: 0.02em;
+        }
+        .toast.error { background: var(--danger); color: #fff; }
+        .toast.warning { background: var(--warning); color: #000; }
+        .toast.success { background: var(--success); color: #000; }
+        .toast.info { background: var(--accent); color: #fff; }
+        @keyframes toastIn { from { transform: translateY(30px) scale(0.90); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+        @keyframes toastOut { to { opacity: 0; transform: translateY(-12px) scale(0.95); } }
+
+        /* ============================================================
+           MODALS – کاملاً در مرکز صفحه
+           ============================================================ */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.65);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 1000;
+            visibility: hidden; opacity: 0;
+            transition: visibility 0s 0.25s, opacity var(--anim);
+            padding: 12px;
+            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+            overflow-y: auto;
+        }
+        .modal-overlay.active { visibility: visible; opacity: 1; transition: visibility 0s 0s, opacity var(--anim); }
+        .modal-content {
+            background: var(--card-bg); border-radius: var(--radius-lg);
+            padding: 18px 16px; width: 100%; max-width: 580px; max-height: 88vh;
+            overflow-y: auto; border: 1px solid var(--border);
+            transform: scale(0.90) translateY(15px); transition: transform var(--anim);
+            box-shadow: var(--shadow-lg);
+            backdrop-filter: blur(var(--glass-blur)); -webkit-backdrop-filter: blur(var(--glass-blur));
+            -webkit-overflow-scrolling: touch; will-change: transform;
+            margin: auto;
+        }
+        .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
+        .modal-content::-webkit-scrollbar { width: 3px; }
+        .modal-content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 0.9rem; font-weight: 700; }
+        .modal-header h3 { font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+        .close-btn {
+            background: var(--input-bg); border: 1px solid var(--border-light); color: var(--text);
+            width: var(--touch-target); height: var(--touch-target); border-radius: 50%;
+            font-size: 1.0rem; cursor: pointer; transition: all 0.15s ease;
+            display: flex; align-items: center; justify-content: center; line-height: 1;
+            touch-action: manipulation;
+        }
+        .close-btn:hover { background: var(--danger-soft); border-color: var(--danger); color: var(--danger); }
+
+        .settings-tabs {
+            display: flex; gap: 3px; margin-bottom: 12px; flex-wrap: wrap;
+            padding: 3px; background: var(--input-bg); border-radius: 30px;
+        }
+        .settings-tab {
+            padding: 5px 10px; border-radius: 30px; font-size: 0.60rem;
+            cursor: pointer; border: none; background: transparent;
+            color: var(--text-secondary); transition: all 0.18s ease;
+            font-family: var(--font); font-weight: 500; white-space: nowrap;
+            min-height: var(--touch-target); touch-action: manipulation;
+        }
+        .settings-tab.active { background: var(--accent); color: #fff; font-weight: 700; box-shadow: 0 2px 14px rgba(0,184,255,0.20); }
+        .settings-tab:hover:not(.active) { color: var(--text); background: rgba(255,255,255,0.03); }
+        .settings-section { display: none; animation: fadeSlide 0.25s ease; }
+        @keyframes fadeSlide { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        .settings-section.active { display: block; }
+        .setting-item {
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 8px; background: var(--input-bg); padding: 8px 12px;
+            border-radius: var(--radius-sm); margin-bottom: 5px;
+            flex-wrap: wrap; border: 1px solid transparent; transition: all 0.18s ease;
+        }
+        .setting-item:hover { border-color: var(--border-light); }
+        .setting-item label { font-size: 0.65rem; flex: 1; display: flex; align-items: center; gap: 5px; font-weight: 500; min-width: 80px; }
+        .setting-item input[type="number"],
+        .setting-item input[type="color"],
+        .setting-item select {
+            width: 80px; background: var(--card-bg); border: 1.5px solid var(--border-light);
+            border-radius: 8px; padding: 5px 8px; color: var(--text);
+            font-family: var(--font); font-size: 0.62rem; transition: all 0.18s ease;
+            min-height: 34px;
+        }
+        .setting-item input[type="number"]:focus,
+        .setting-item select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+        .setting-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
+        .setting-item input[type="color"] { width: 40px; height: 28px; padding: 2px; cursor: pointer; border-radius: 6px; }
+        .setting-item textarea {
+            background: var(--input-bg); color: var(--text); border-radius: var(--radius-sm);
+            padding: 8px; border: 1.5px solid var(--border-light);
+            font-family: var(--mono); width: 100%; resize: vertical;
+            font-size: 0.62rem; line-height: 1.7; transition: all 0.18s ease;
+        }
+        .setting-item textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+
+        .modal-btn {
+            padding: 6px 14px; border-radius: 30px; font-size: 0.62rem; font-weight: 500;
+            cursor: pointer; background: var(--input-bg); border: 1.5px solid var(--border-light);
+            color: var(--text); font-family: var(--font); transition: all 0.18s ease;
+            white-space: nowrap; min-height: var(--touch-target); display: inline-flex;
+            align-items: center; gap: 4px; touch-action: manipulation;
+        }
+        .modal-btn:hover { border-color: var(--accent); background: var(--accent-soft); transform: translateY(-2px); }
+        .modal-btn-primary { background: var(--accent) !important; border-color: var(--accent) !important; color: #fff !important; font-weight: 700 !important; box-shadow: 0 0 20px rgba(0,184,255,0.15) !important; }
+        .modal-btn-primary:hover { background: #00a8e6 !important; box-shadow: 0 0 30px rgba(0,184,255,0.30) !important; }
+        .modal-btn-danger { background: var(--danger-soft) !important; border-color: var(--danger) !important; color: var(--danger) !important; }
+        .modal-btn-danger:hover { background: var(--danger) !important; color: #fff !important; }
+
+        /* ============================================================
+           REPO PANEL
+           ============================================================ */
+        .repo-stats { display: flex; gap: 8px; font-size: 0.60rem; color: var(--text-secondary); margin-bottom: 6px; flex-wrap: wrap; }
+        .repo-stats span { background: var(--input-bg); padding: 2px 10px; border-radius: 20px; }
+        .repo-domain-list {
+            max-height: 200px; overflow-y: auto; background: var(--input-bg);
+            border-radius: var(--radius-sm); padding: 4px; margin-bottom: 6px;
+            border: 1px solid var(--border-light); transition: all 0.2s ease;
+        }
+        .repo-domain-list:hover { border-color: var(--accent-soft); box-shadow: 0 0 12px var(--accent-soft); }
+        .repo-domain-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 4px 8px; border-radius: 6px; transition: background 0.15s ease;
+            font-size: 0.62rem; font-family: var(--mono); border-bottom: 1px solid var(--border-light);
+        }
+        .repo-domain-item:last-child { border-bottom: none; }
+        .repo-domain-item:hover { background: var(--accent-soft); transform: translateX(-2px); }
+        .repo-domain-item .remove-domain {
+            background: transparent; border: none; color: var(--danger);
+            cursor: pointer; font-size: 0.7rem; padding: 0 4px; opacity: 0.5; transition: opacity 0.15s;
+        }
+        .repo-domain-item .remove-domain:hover { opacity: 1; }
+        .repo-add-domain { display: flex; gap: 5px; margin-top: 4px; width: 100%; }
+        .repo-add-domain input {
+            flex: 1; background: var(--card-bg); border: 1.5px solid var(--border-light);
+            border-radius: 30px; padding: 5px 12px; color: var(--text);
+            font-size: 0.62rem; min-height: var(--touch-target);
+            transition: all 0.2s ease; width: 100%;
+        }
+        .repo-add-domain input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+        .repo-add-domain button { flex-shrink: 0; }
+        .repo-actions-extra { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
+        #repoTextarea {
+            width: 100%; background: var(--input-bg); color: var(--text);
+            border-radius: var(--radius-sm); padding: 8px;
+            border: 1.5px solid var(--border-light); font-family: var(--mono);
+            resize: vertical; font-size: 0.62rem; line-height: 1.7;
+            transition: all 0.2s ease; margin-top: 4px;
+        }
+        #repoTextarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        .footer { text-align: center; padding: 14px; font-size: 0.55rem; color: var(--text-muted); margin-top: 12px; border-top: 1px solid var(--border-light); letter-spacing: 0.04em; }
+        .footer span { color: var(--accent-glow); font-weight: 600; }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (min-width: 1024px) {
+            body { padding: 16px 32px; }
+            .stat-value { font-size: 1.05rem; }
+            .stats-row { grid-template-columns: repeat(6, 1fr); }
+            .table-wrap { max-height: 460px; }
+            .logo-text { font-size: 1.1rem; }
+        }
+        @media (max-width: 768px) {
+            body { padding: 6px; }
+            .header { padding: 6px 10px; gap: 4px; }
+            .logo-text { font-size: 0.85rem; }
+            .logo-icon { width: 34px; height: 34px; font-size: 1.0rem; }
+            .version-badge { font-size: 0.55rem; padding: 2px 8px; }
+            .sensor-box { font-size: 0.58rem; padding: 3px 10px; }
+            .sensor-dot { width: 8px; height: 8px; }
+            .stat-card { padding: 8px 2px; min-height: 56px; }
+            .stat-value { font-size: 0.80rem; }
+            .stat-icon { font-size: 0.95rem; }
+            .stat-label { font-size: 0.45rem; }
+            .table-wrap { max-height: 260px; }
+            .setting-item { flex-direction: column; align-items: stretch; }
+            .setting-item input[type="number"], .setting-item select { width: 100%; }
+            .settings-tab { font-size: 0.55rem; padding: 4px 8px; }
+            .actions button { font-size: 0.60rem; padding: 5px 10px; }
+            .repo-chip { font-size: 0.60rem; padding: 4px 10px; }
+            .repo-action-btn { font-size: 0.60rem; padding: 4px 10px; }
+            thead th { font-size: 0.52rem; padding: 5px 3px; }
+            tbody td { font-size: 0.52rem; padding: 4px 3px; }
+            .table-toolbar .search-input,
+            .table-toolbar .toolbar-select { font-size: 0.58rem; padding: 4px 10px; min-height: 36px; }
+            .table-toolbar .toolbar-btn { font-size: 0.56rem; padding: 4px 10px; min-height: 36px; }
+            .chart-card canvas { height: 60px !important; }
+            .modal-content { padding: 14px 12px; max-width: 100%; margin: 6px; }
+            .slider-group { flex: 1 1 100%; }
+            .slider-group label { font-size: 0.60rem; }
+            .slider-value { font-size: 0.65rem; min-width: 24px; }
+        }
+        @media (max-width: 420px) {
+            .header { flex-direction: column; align-items: stretch; gap: 4px; }
+            .header-controls { justify-content: center; flex-wrap: wrap; }
+            .logo-group { justify-content: center; flex-wrap: wrap; }
+            .stats-row { grid-template-columns: repeat(3, 1fr); }
+            .repo-row { justify-content: center; }
+            .repo-action-btn { margin-right: 0; }
+            .actions { justify-content: center; }
+            .table-toolbar { justify-content: center; }
+            .chart-section { grid-template-columns: 1fr; }
+            .modal-content { padding: 12px 10px; }
+        }
+
+        /* ============================================================
+           KEYBOARD HINT
+           ============================================================ */
+        .kbd-hint {
+            position: fixed; bottom: 80px; right: 12px;
+            background: var(--card-bg); border: 1px solid var(--border);
+            border-radius: var(--radius-sm); padding: 8px 12px;
+            font-size: 0.55rem; color: var(--text-muted);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            box-shadow: var(--shadow); z-index: 50;
+            display: none; flex-direction: column; gap: 2px; line-height: 1.5; max-width: 160px;
+        }
+        .kbd-hint.show { display: flex; }
+        .kbd-hint kbd { background: var(--input-bg); padding: 1px 6px; border-radius: 4px; font-family: var(--mono); font-size: 0.50rem; border: 1px solid var(--border-light); }
+        @media (max-width: 640px) { .kbd-hint { display: none !important; } }
+
+        /* ============================================================
+           MONITOR PANEL
+           ============================================================ */
+        .monitor-history { max-height: 150px; overflow-y: auto; background: var(--input-bg); border-radius: var(--radius-sm); padding: 4px; border: 1px solid var(--border-light); font-size: 0.55rem; margin-top: 4px; }
+        .monitor-history-item { display: flex; justify-content: space-between; padding: 2px 6px; border-bottom: 1px solid var(--border-light); }
+        .monitor-history-item:last-child { border-bottom: none; }
+        .monitor-alert { color: var(--warning); }
+        .monitor-status-ok { color: var(--success); }
+
+        /* ============================================================
+           HISTORY PANEL
+           ============================================================ */
+        .history-item-detail { background: var(--input-bg); border-radius: var(--radius-sm); padding: 6px 10px; margin-bottom: 4px; border-left: 3px solid var(--accent); }
+        .history-item-detail .hdr { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px; font-size: 0.60rem; }
+        .history-item-detail .hdr span { color: var(--text-secondary); }
+        .history-item-detail .hdr .date { color: var(--accent-glow); font-weight: 600; }
+        .history-item-detail .stats { display: flex; gap: 8px; font-size: 0.55rem; margin-top: 2px; flex-wrap: wrap; }
+        .history-item-detail .stats .stat-badge { background: var(--card-bg); padding: 1px 6px; border-radius: 12px; }
+        .history-item-detail .actions { margin-top: 4px; display: flex; gap: 4px; }
+    </style>
+</head>
+<body>
+
+<!-- TOAST CONTAINER – FIXED BOTTOM -->
+<div class="toast-container" id="toastContainer"></div>
+
+<div class="app-container">
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="logo-group">
+            <div class="logo-icon">🌐</div>
+            <div>
+                <div class="logo-text">SNI Scanner Pro</div>
+                <div class="logo-sub">اسکنر حرفه‌ای شبکه</div>
+            </div>
+            <span class="version-badge">v1.0.2</span>
+        </div>
+        <div class="header-controls">
+            <div class="sensor-box">
+                <span id="sensorText">📡 بررسی...</span>
+                <span class="sensor-dot" id="sensorDot"></span>
+            </div>
+            <button class="icon-btn" id="langToggle" title="تغییر زبان">🇬🇧</button>
+            <button class="icon-btn" id="themeToggle" title="تغییر تم">🌓</button>
+            <button class="icon-btn" id="kbdToggle" title="راهنمای کلیدها">⌨️</button>
+        </div>
+    </header>
+
+    <!-- STATS -->
+    <section class="stats-row" aria-label="آمار اسکن">
+        <div class="stat-card glass"><span class="stat-icon">📋</span><span class="stat-value mono" id="queueCount">0</span><span class="stat-label" id="lblQueue">در صف</span></div>
+        <div class="stat-card glass"><span class="stat-icon">✅</span><span class="stat-value mono" id="respondCount">0</span><span class="stat-label" id="lblRespond">پاسخگو</span></div>
+        <div class="stat-card glass"><span class="stat-icon">🚫</span><span class="stat-value mono" id="offlineFilteredCount">0</span><span class="stat-label" id="lblOfflineFiltered">آفلاین/فیلتر</span></div>
+        <div class="stat-card glass"><span class="stat-icon">⏱️</span><span class="stat-value mono" id="avgPingStat">—</span><span class="stat-label" id="lblAvgPing">میانگین پینگ</span></div>
+        <div class="stat-card glass"><span class="stat-icon">⚡</span><span class="stat-value mono" id="fastestDomain">—</span><span class="stat-label" id="lblFastest">سریع‌ترین</span></div>
+        <div class="stat-card glass"><span class="stat-icon">📊</span><span class="stat-value mono" id="avgJitterStat">—</span><span class="stat-label" id="lblJitter">جیتر متوسط</span></div>
+    </section>
+
+    <!-- REPO ROW -->
+    <section class="repo-row glass" aria-label="انتخاب مخازن">
+        <span class="section-label" id="lblRepos">🗂️ مخازن:</span>
+        <label class="repo-chip checked" data-repo="global">🌍 جهانی</label>
+        <label class="repo-chip checked" data-repo="iran">🇮🇷 ایران</label>
+        <label class="repo-chip checked" data-repo="saz">🇨🇳 SAZ</label>
+        <label class="repo-chip checked" data-repo="dax">🔥 DAX</label>
+        <button class="repo-action-btn" id="manageReposBtn">🛠️ مدیریت</button>
+        <div class="repo-hint" data-i18n="repo_hint">با کلیک بر روی هر کدام آن را فعال/غیرفعال کنید</div>
+    </section>
+
+    <!-- SLIDERS -->
+    <section class="sliders-row glass" aria-label="تنظیمات اسکن">
+        <div class="slider-group">
+            <label id="lblDomainLimit" data-i18n="domainLimit">🔢 محدودیت:</label>
+            <input type="range" id="domainLimitSlider" min="1" max="200" value="50">
+            <span class="slider-value mono" id="domainLimitValue">50</span>
+        </div>
+        <div class="slider-group">
+            <label id="lblConcurrency" data-i18n="concurrency">⚙️ همزمانی:</label>
+            <input type="range" id="concurrencySlider" min="1" max="20" value="6">
+            <span class="slider-value mono" id="concurrencyValue">6</span>
+        </div>
+        <div class="slider-group">
+            <label id="lblTimeout" data-i18n="timeout">⏱️ مهلت (ms):</label>
+            <input type="range" id="timeoutSlider" min="500" max="8000" step="100" value="3000">
+            <span class="slider-value mono" id="timeoutValue">3000</span>
+        </div>
+    </section>
+
+    <!-- ACTIONS -->
+    <div class="actions">
+        <button id="startScanBtn" class="btn-primary" data-i18n="start_scan">🚀 شروع اسکن</button>
+        <button id="pauseResumeBtn" class="hidden" data-i18n="pause">⏸️ مکث</button>
+        <button id="stopScanBtn" class="btn-danger hidden" data-i18n="stop">⏹️ توقف</button>
+        <button id="clearResultsBtn" class="btn-ghost" data-i18n="clear">🧹 پاک‌سازی</button>
+        <button id="sensorCheckBtn" class="btn-ghost" data-i18n="check_connection">📡 بررسی اتصال</button>
+        <button id="settingsBtn" class="btn-ghost" data-i18n="settings">⚙️ تنظیمات</button>
+        <button id="quickScanBtn" class="btn-ghost" data-i18n="quick_scan">⚡ اسکن سریع</button>
+        <button id="historyBtn" class="btn-ghost" data-i18n="history">📜 تاریخچه</button>
+        <button id="monitorBtn" class="btn-ghost" data-i18n="monitor">🔔 مانیتور</button>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="progress-wrap">
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+
+    <!-- CHART SECTION -->
+    <section class="chart-section">
+        <div class="chart-card glass">
+            <h4 data-i18n="ping_trend">📈 روند پینگ</h4>
+            <canvas id="pingChart"></canvas>
+        </div>
+        <div class="chart-card glass">
+            <h4 data-i18n="jitter_dist">📊 توزیع جیتر</h4>
+            <canvas id="jitterChart"></canvas>
+        </div>
+    </section>
+
+    <!-- TABLE TOOLBAR -->
+    <div class="table-toolbar">
+        <input type="text" class="search-input" id="searchInput" placeholder="🔍 جستجوی دامنه..." data-i18n-placeholder="search_domain">
+        <select class="toolbar-select" id="sortSelect">
+            <option value="ping" data-i18n="sort_ping">⏱️ پینگ</option>
+            <option value="loss" data-i18n="sort_loss">📉 پکت‌لاس</option>
+            <option value="alpha" data-i18n="sort_alpha">🔤 الفبا</option>
+            <option value="jitter" data-i18n="sort_jitter">📊 جیتر</option>
+            <option value="stability" data-i18n="sort_stability">🛡️ پایداری</option>
+            <option value="time" data-i18n="sort_time">🕒 زمان</option>
+        </select>
+        <button class="toolbar-btn" id="exportCsvBtn" data-i18n="export_csv">📤 CSV</button>
+        <button class="toolbar-btn" id="exportJsonBtn" data-i18n="export_json">💾 JSON</button>
+        <button class="toolbar-btn" id="exportPdfBtn" data-i18n="export_pdf">📄 PDF</button>
+        <button class="toolbar-btn" id="filterOnlineBtn" data-i18n="filter_online">🟢 آنلاین</button>
+        <button class="toolbar-btn" id="filterSlowBtn" data-i18n="filter_slow">🐢 کند</button>
+        <button class="toolbar-btn" id="selectAllBtn" data-i18n="select_all">☑️ همه</button>
+        <button class="toolbar-btn" id="batchPingBtn" data-i18n="batch_ping_btn">📡 پینگ مجدد</button>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrap glass">
+        <table id="resultsTable">
+            <thead>
+                <tr>
+                    <th style="width:28px;">#</th>
+                    <th data-i18n="th_domain">دامنه</th>
+                    <th data-i18n="th_status">وضعیت</th>
+                    <th data-i18n="th_ping">پینگ</th>
+                    <th data-i18n="th_jitter">جیتر</th>
+                    <th data-i18n="th_loss">پکت‌لاس</th>
+                    <th data-i18n="th_stability">پایداری</th>
+                    <th data-i18n="th_time">زمان</th>
+                    <th style="width:44px;"></th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer" data-i18n="footer">✨ Developed by <span>THE SAZ🔱</span> — نسخه ۱.۰.۲ — تمامی عملیات در مرورگر انجام می‌شود ✨</footer>
+
+    <!-- ============================================================
+    MODALS
+    ============================================================ -->
+
+    <!-- SETTINGS MODAL -->
+    <div id="settingsModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header"><h3 data-i18n="settings_title">⚙️ تنظیمات پیشرفته</h3><button class="close-btn" id="closeSettings">✕</button></div>
+            <div class="settings-tabs">
+                <button class="settings-tab active" data-tab="general" data-i18n="tab_general">📋 عمومی</button>
+                <button class="settings-tab" data-tab="network" data-i18n="tab_network">🌐 شبکه</button>
+                <button class="settings-tab" data-tab="appearance" data-i18n="tab_appearance">🎨 ظاهر</button>
+                <button class="settings-tab" data-tab="notifications" data-i18n="tab_notifications">🔔 اعلان‌ها</button>
+                <button class="settings-tab" data-tab="profiles" data-i18n="tab_profiles">💼 پروفایل</button>
+                <button class="settings-tab" data-tab="advanced" data-i18n="tab_advanced">🧪 پیشرفته</button>
+            </div>
+
+            <div class="settings-section active" id="section-general">
+                <div class="setting-item"><label data-i18n="ping_count">🔢 تعداد پکت</label><input type="number" id="pingCount" value="4" min="1" max="12"></div>
+                <div class="setting-item"><label data-i18n="ping_interval">📏 فاصله پکت‌ها (ms)</label><input type="number" id="pingInterval" value="200" min="50" step="50"></div>
+                <div class="setting-item"><label data-i18n="retry_count">🔄 تلاش مجدد</label><input type="number" id="retryCount" value="2" min="0" max="5"></div>
+                <div class="setting-item"><label data-i18n="table_density">📊 تراکم جدول</label><input type="range" id="tableDensity" min="0.8" max="1.4" step="0.05" value="1"></div>
+                <div class="setting-item"><label data-i18n="page_size">📏 نتایج در صفحه</label><input type="number" id="pageSize" value="150" min="10" max="1000"></div>
+            </div>
+
+            <div class="settings-section" id="section-network">
+                <div class="setting-item"><label data-i18n="loss_threshold">📉 آستانه پکت‌لاس (%)</label><input type="number" id="lossThreshold" value="20" min="0" max="100"></div>
+                <div class="setting-item"><label data-i18n="jitter_threshold">📊 آستانه جیتر (ms)</label><input type="number" id="jitterStable" value="50" min="10"></div>
+                <div class="setting-item"><label data-i18n="min_latency">🐢 حداقل تأخیر (ms)</label><input type="number" id="minLatency" value="55" min="5"></div>
+                <div class="setting-item"><label data-i18n="ping_path">🌐 مسیر پینگ</label><select id="pingPaths"><option value="favicon" data-i18n="path_favicon">/favicon.ico</option><option value="robots" data-i18n="path_robots">/robots.txt</option><option value="both" selected data-i18n="path_both">هر دو</option></select></div>
+                <div class="setting-item"><label data-i18n="ssl_check">🔒 بررسی SSL</label><input type="checkbox" id="sslCheck"></div>
+                <div class="setting-item"><label data-i18n="dns_resolver">🌍 DNS Resolver</label><select id="dnsResolver"><option value="auto" selected data-i18n="dns_auto">خودکار</option><option value="google" data-i18n="dns_google">Google (8.8.8.8)</option><option value="cloudflare" data-i18n="dns_cloudflare">Cloudflare (1.1.1.1)</option><option value="shecan" data-i18n="dns_shecan">شکن</option></select></div>
+            </div>
+
+            <div class="settings-section" id="section-appearance">
+                <div class="setting-item"><label data-i18n="accent_color">🎨 رنگ اصلی</label><input type="color" id="accentColor" value="#00b8ff"></div>
+                <div class="setting-item"><label data-i18n="theme_preset">🌈 تم آماده</label><select id="themePreset"><option value="ocean" data-i18n="theme_ocean">🌊 اقیانوس</option><option value="sunset" data-i18n="theme_sunset">🌅 غروب</option><option value="forest" data-i18n="theme_forest">🌲 جنگل</option><option value="neon" data-i18n="theme_neon">💜 نئون</option><option value="gold" data-i18n="theme_gold">🌟 طلایی</option><option value="midnight" data-i18n="theme_midnight">🌑 نیمه‌شب</option></select></div>
+                <div class="setting-item"><label data-i18n="anim_speed">⚡ سرعت انیمیشن</label><input type="range" id="animSpeedSlider" min="0.5" max="2" step="0.1" value="1"></div>
+                <div class="setting-item"><label data-i18n="table_font">🔤 فونت جدول (px)</label><input type="number" id="tableFontSize" value="12" min="9" max="20"></div>
+            </div>
+
+            <div class="settings-section" id="section-notifications">
+                <div class="setting-item"><label data-i18n="toast_duration">⏳ مدت پیام (ثانیه)</label><input type="number" id="toastDuration" value="3" min="1" max="10"></div>
+                <div class="setting-item"><label data-i18n="vibrate">📳 لرزش پایان</label><input type="checkbox" id="vibrateCheck"></div>
+                <div class="setting-item"><label data-i18n="sound">🔊 صدای پایان</label><input type="checkbox" id="soundCheck"></div>
+                <div class="setting-item"><label data-i18n="auto_save">💾 ذخیره خودکار</label><input type="checkbox" id="autoSaveCheck"></div>
+                <div class="setting-item"><label data-i18n="desktop_notify">🔔 اعلان دسکتاپ</label><input type="checkbox" id="desktopNotifyCheck"></div>
+            </div>
+
+            <div class="settings-section" id="section-profiles">
+                <div class="setting-item"><label data-i18n="profile_select">💼 پروفایل</label><select id="profileSelect" style="width:140px;"><option value="" data-i18n="profile_select_option">— انتخاب —</option></select></div>
+                <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:4px;">
+                    <button id="saveProfileBtn" class="modal-btn" data-i18n="save_profile">💾 ذخیره</button>
+                    <button id="loadProfileBtn" class="modal-btn" data-i18n="load_profile">📥 بارگذاری</button>
+                    <button id="deleteProfileBtn" class="modal-btn modal-btn-danger" data-i18n="delete_profile">🗑️ حذف</button>
+                </div>
+                <div class="setting-item"><label data-i18n="reset_all">↩️ بازنشانی</label><button id="resetAllSettingsBtn" class="modal-btn modal-btn-danger" data-i18n="reset">بازنشانی</button></div>
+            </div>
+
+            <div class="settings-section" id="section-advanced">
+                <div class="setting-item"><label data-i18n="use_worker">🧵 Web Worker</label><input type="checkbox" id="useWorker" checked></div>
+                <div class="setting-item"><label data-i18n="bulk_scan">📦 Bulk Scan</label><input type="checkbox" id="bulkScan"></div>
+                <div class="setting-item"><label data-i18n="schedule">🕒 اسکن زمان‌بندی (دقیقه)</label><input type="number" id="scheduleMinutes" value="0" min="0" max="1440"></div>
+                <div class="setting-item"><label data-i18n="max_history">📋 حداکثر تاریخچه</label><input type="number" id="maxHistory" value="50" min="5" max="500"></div>
+                <div class="setting-item"><label data-i18n="export_settings">📤 اکسپورت تنظیمات</label><button id="exportSettingsBtn" class="modal-btn" data-i18n="export_json_btn">JSON</button></div>
+                <div class="setting-item"><label data-i18n="import_settings">📥 ایمپورت تنظیمات</label><button id="importSettingsBtn" class="modal-btn" data-i18n="import_file">فایل</button></div>
+            </div>
+
+            <button id="saveQuitSettings" class="modal-btn modal-btn-primary" style="width:100%;margin-top:12px;padding:10px;" data-i18n="save_exit">💾 ذخیره و خروج</button>
+        </div>
+    </div>
+
+    <!-- REPO MODAL -->
+    <div id="repoModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header"><h3 data-i18n="repo_title">🗄️ مدیریت مخازن</h3><button class="close-btn" id="closeRepoModal">✕</button></div>
+            <div style="display:flex;gap:4px;margin-bottom:4px;flex-wrap:wrap;align-items:center;">
+                <select id="repoSelect" style="flex:1;min-width:90px;padding:4px 10px;border-radius:30px;background:var(--input-bg);border:1.5px solid var(--border-light);color:var(--text);font-family:var(--font);font-size:0.58rem;min-height:var(--touch-target);"></select>
+                <button id="newRepoBtn" class="modal-btn modal-btn-primary" data-i18n="new_repo">➕ جدید</button>
+            </div>
+            <div class="repo-stats" id="repoStats">
+                <span data-i18n="repo_domain_count">📊 تعداد دامنه: <span id="repoDomainCount">0</span></span>
+                <span data-i18n="repo_unique_count">📋 منحصربه‌فرد: <span id="repoUniqueCount">0</span></span>
+            </div>
+            <div class="repo-domain-list" id="repoDomainList"></div>
+            <textarea id="repoTextarea" rows="4" placeholder="دامنه‌ها را خط‌به‌خط وارد کنید..." data-i18n-placeholder="repo_placeholder"></textarea>
+            <div class="repo-add-domain">
+                <input type="text" id="repoAddInput" placeholder="دامنه جدید..." data-i18n-placeholder="add_domain_placeholder">
+                <button id="repoAddBtn" class="modal-btn modal-btn-primary" style="padding:4px 10px;" data-i18n="add_domain">➕ افزودن</button>
+            </div>
+            <div class="repo-actions-extra">
+                <button id="repoSortBtn" class="modal-btn" data-i18n="sort_repo">🔤 مرتب‌سازی</button>
+                <button id="repoDedupBtn" class="modal-btn" data-i18n="dedup_repo">🧹 حذف تکراری</button>
+                <button id="repoClearAllBtn" class="modal-btn modal-btn-danger" data-i18n="clear_repo">🗑️ پاک‌سازی همه</button>
+            </div>
+            <div style="display:flex;gap:4px;margin-top:4px;flex-wrap:wrap;">
+                <button id="saveRepoChanges" class="modal-btn modal-btn-primary" data-i18n="save_repo">💾 ذخیره</button>
+                <button id="importRepoBtn" class="modal-btn" data-i18n="import_repo">📥 ایمپورت</button>
+                <button id="exportRepoBtn" class="modal-btn" data-i18n="export_repo">📤 اکسپورت</button>
+                <button id="resetDefaultRepoBtn" class="modal-btn" data-i18n="reset_repo">↩️ پیش‌فرض</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HISTORY MODAL -->
+    <div id="historyModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header"><h3 data-i18n="history_title">📜 تاریخچه اسکن‌ها</h3><button class="close-btn" id="closeHistoryModal">✕</button></div>
+            <div id="historyList" style="max-height:320px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;"></div>
+            <div style="display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;">
+                <button id="clearHistoryBtn" class="modal-btn modal-btn-danger" data-i18n="clear_history">🗑️ پاک‌سازی همه</button>
+                <button id="exportHistoryBtn" class="modal-btn" data-i18n="export_history">📤 اکسپورت JSON</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MONITOR MODAL -->
+    <div id="monitorModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header"><h3 data-i18n="monitor_title">🔔 مانیتورینگ دامنه</h3><button class="close-btn" id="closeMonitorModal">✕</button></div>
+            <p style="font-size:0.60rem;color:var(--text-secondary);margin-bottom:6px;" data-i18n="monitor_desc">دامنه‌های انتخاب‌شده را هر چند دقیقه یک‌بار بررسی کن و در صورت تغییر وضعیت اعلان بده.</p>
+            <div class="setting-item"><label data-i18n="monitor_interval">🔄 فاصله (دقیقه)</label><input type="number" id="monitorInterval" value="5" min="1" max="60"></div>
+            <div class="setting-item"><label data-i18n="monitor_domains">📋 دامنه‌ها (خط به خط)</label><textarea id="monitorDomains" rows="3" placeholder="دامنه‌ها را وارد کنید..." data-i18n-placeholder="monitor_placeholder"></textarea></div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;">
+                <button id="startMonitorBtn" class="modal-btn modal-btn-primary" data-i18n="start_monitor">▶️ شروع</button>
+                <button id="stopMonitorBtn" class="modal-btn modal-btn-danger" style="display:none;" data-i18n="stop_monitor">⏹️ توقف</button>
+                <button id="clearMonitorLogBtn" class="modal-btn" data-i18n="clear_monitor_log">🗑️ پاک‌سازی لاگ</button>
+            </div>
+            <div class="monitor-history" id="monitorHistory">
+                <div style="text-align:center;color:var(--text-muted);padding:8px;">لاگ مانیتورینگ</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KEYBOARD HINT -->
+    <div class="kbd-hint" id="kbdHint">
+        <span><kbd>Ctrl+Enter</kbd> <span data-i18n="kbd_start">شروع اسکن</span></span>
+        <span><kbd>Ctrl+.</kbd> <span data-i18n="kbd_stop">توقف</span></span>
+        <span><kbd>Ctrl+E</kbd> <span data-i18n="kbd_export">اکسپورت CSV</span></span>
+        <span><kbd>Ctrl+Shift+S</kbd> <span data-i18n="kbd_settings">تنظیمات</span></span>
+        <span><kbd>Ctrl+F</kbd> <span data-i18n="kbd_search">جستجو</span></span>
+    </div>
+</div>
+
+<!-- ============================================================
+SCRIPT – نهایی، پایدار، بهینه و با ترجمه کامل
+============================================================ -->
+<script>
+    (function() {
+        'use strict';
+
+        // ─── CONSTANTS ────────────────────────────────────────────────
+        const PREFIX = 'sni_pro_2_';
+        const DEFAULT_REPOS = {
+            global: [
+                "google.com", "github.com", "cloudflare.com", "microsoft.com", "apple.com", "facebook.com",
+                "twitter.com", "instagram.com", "youtube.com", "reddit.com", "wikipedia.org", "stackoverflow.com",
+                "mozilla.org", "apache.org", "nginx.org", "mysql.com", "python.org", "nodejs.org", "docker.com",
+                "kubernetes.io", "amazon.com", "netflix.com", "adobe.com", "oracle.com", "salesforce.com",
+                "zoom.us", "slack.com", "discord.com", "twitch.tv", "spotify.com", "dropbox.com", "whatsapp.com",
+                "telegram.org", "signal.org", "bbc.com", "cnn.com", "nytimes.com", "ebay.com", "paypal.com",
+                "stripe.com", "shopify.com", "godaddy.com", "namecheap.com", "digitalocean.com", "linode.com",
+                "vultr.com", "heroku.com", "vercel.com", "netlify.com", "fastly.com", "akamai.com", "cloudfront.net",
+                "azure.com", "samsung.com", "pypi.org", "npmjs.com", "typescriptlang.org", "reactjs.org",
+                "angular.io", "vuejs.org", "jquery.com", "getbootstrap.com", "tailwindcss.com", "laravel.com",
+                "rubyonrails.org", "go.dev", "rust-lang.org", "php.net", "perl.org", "swift.org", "kotlinlang.org",
+                "android.com", "ubuntu.com", "debian.org", "fedora.org", "archlinux.org", "freebsd.org", "gnu.org",
+                "kernel.org", "bbc.co.uk", "aljazeera.com", "theguardian.com", "reuters.com", "bloomberg.com",
+                "forbes.com", "wsj.com", "economist.com", "nature.com", "science.org", "ieee.org", "mit.edu",
+                "stanford.edu", "harvard.edu", "ox.ac.uk", "cam.ac.uk", "ethz.ch", "utoronto.ca", "berkeley.edu",
+                "columbia.edu", "yale.edu", "princeton.edu", "linkedin.com", "pinterest.com", "tumblr.com",
+                "flickr.com", "vimeo.com", "soundcloud.com", "medium.com", "quora.com", "yelp.com", "imdb.com",
+                "kickstarter.com", "etsy.com", "walmart.com", "target.com", "bestbuy.com", "homedepot.com",
+                "lowes.com", "costco.com", "ikea.com", "nike.com", "adidas.com", "zara.com", "hm.com", "uniqlo.com",
+                "airbnb.com", "booking.com", "expedia.com", "tripadvisor.com", "uber.com", "lyft.com", "doordash.com",
+                "grubhub.com", "instacart.com", "robinhood.com", "coinbase.com", "binance.com", "kraken.com",
+                "etoro.com", "fidelity.com", "vanguard.com", "schwab.com", "tdameritrade.com", "marketwatch.com",
+                "investopedia.com", "seekingalpha.com", "fool.com", "zillow.com", "realtor.com", "trulia.com",
+                "redfin.com", "apartments.com", "glassdoor.com", "indeed.com", "monster.com", "ziprecruiter.com"
+            ],
+            iran: [
+                "digikala.com", "divar.ir", "snapp.ir", "tapsi.ir", "bama.ir", "varzesh3.com", "aparat.com",
+                "filimo.com", "telewebion.com", "namnak.com", "irib.ir", "gov.ir", "sanjesh.org", "medu.ir",
+                "sb24.ir", "cbi.ir", "bmi.ir", "mci.ir", "irancell.ir", "rightel.ir", "rubika.ir", "virgool.io",
+                "donyayekhodro.com", "cafebazaar.ir", "myket.ir", "sibapp.com", "takhfifan.com", "alibaba.ir",
+                "hotelyar.com", "snappfood.ir", "chamedoon.ir", "torob.com", "esam.ir", "shaparak.ir", "pec.ir",
+                "post.ir", "tci.ir", "itc.ir", "mashadkala.com", "niniplus.com", "sheypoor.com", "bazarkhodro.ir",
+                "persiangig.com", "iranhost.com", "parspack.com", "hostiran.ir", "server.ir", "arvancloud.com",
+                "abriak.com", "liara.ir", "ghasedak24.ir", "tipaxco.com", "alopeyk.com", "snappbox.ir", "drnext.ir",
+                "delino.com", "karnameh.com", "fidibo.com", "taaghche.com", "basalam.com", "ghatreh.com", "yjc.ir",
+                "khabaronline.ir", "tabnak.ir", "fararu.com", "entekhab.ir", "isna.ir", "irna.ir", "mehrnews.com",
+                "tasnimnews.com", "farsnews.ir", "asriran.com", "rouydad24.ir", "eghtesadnews.com",
+                "donya-e-eqtesad.com", "tinn.ir", "bultannews.com", "khorasannews.com", "jahannews.com",
+                "akharinkhabar.ir", "borna.news", "tejaratnews.com", "sharghdaily.com", "hamshahrionline.ir",
+                "ettelaat.com", "jamaran.news", "mardomsalari.ir", "afkarnews.ir", "nedayesfahan.ir",
+                "khabarfoori.com", "chichest.ir", "zoomit.ir", "digiato.com", "itresan.com", "shabakeh-mag.com",
+                "webna.ir", "click.ir", "ictna.ir", "techrasa.com", "peyvast.com", "khanoumi.com", "modiseh.com",
+                "banimode.com", "chilivery.com", "okala.com", "snappmarket.ir", "dolphinapp.ir", "bazarebours.ir",
+                "tsetmc.com", "fipiran.com", "rahavard365.com", "sahamyab.com", "boursview.com", "agah.com",
+                "mofidonline.com", "sahra.ir", "epol.ir", "bimeh.com", "bimebazar.com", "azki.com", "bimito.com",
+                "bimehmarkazi.com", "samaninsurance.ir", "alborzinsurance.ir", "asia-insurance.ir",
+                "dana-insurance.ir", "parsianinsurance.ir", "tosee-insurance.ir", "melatinsurance.ir",
+                "novininsurance.ir", "karafarininsurance.ir", "razi-insurance.ir", "dayinsurance.ir",
+                "omid-insurance.ir", "hafezinsurance.ir", "tejarat-insurance.ir", "sina-insurance.ir",
+                "moallem-insurance.ir", "dey-insurance.ir", "samat-insurance.ir", "mihan-insurance.ir",
+                "armani-insurance.ir", "etminan-insurance.ir", "saman-insurance.ir"
+            ],
+            saz: [
+                "baidu.com", "alibaba.com", "qq.com", "jd.com", "taobao.com", "sina.com.cn", "weibo.com",
+                "csdn.net", "zhihu.com", "bilibili.com", "huawei.com", "xiaomi.com", "oppo.com", "vivo.com",
+                "bytedance.com", "tiktok.com", "cdnjs.com", "jsdelivr.net", "unpkg.com", "fastly.com",
+                "tencent.com", "netease.com", "360.cn", "douyin.com", "kuaishou.com", "meituan.com",
+                "dianping.com", "ctrip.com", "pinduoduo.com", "vip.com", "openai.com", "deepmind.com",
+                "stability.ai", "midjourney.com", "replit.com", "codesandbox.io", "herokuapp.com", "netlify.app",
+                "vercel.app", "workers.dev", "pages.dev", "deno.dev", "fly.dev", "railway.app", "supabase.co",
+                "nhost.io", "hasura.io", "planetscale.com", "neon.tech", "turso.tech", "upstash.com", "redis.com",
+                "mongodb.com", "cockroachlabs.com", "timescale.com", "convex.dev", "liveblocks.io", "clerk.com",
+                "kinde.com", "auth0.com", "firebase.google.com", "supabase.com", "stripe.com", "paypal.com",
+                "squareup.com", "adyen.com", "checkout.com", "razorpay.com", "paddle.com", "cloudinary.com",
+                "imgix.com", "uploadcare.com", "contentful.com", "sanity.io", "strapi.io", "drupal.org",
+                "wordpress.org", "joomla.org", "typo3.org", "tailscale.com", "zerotier.com", "ngrok.com",
+                "cloudflare.com", "digitalocean.com", "linode.com", "vultr.com", "upcloud.com", "scaleway.com",
+                "exoscale.com", "netlify.com", "vercel.com", "render.com", "cyclic.sh", "qovery.com", "porter.run",
+                "fly.io", "railway.app", "koyeb.com", "deno.com", "alipay.com", "wechat.com", "douban.com",
+                "tmall.com", "xinhuanet.com", "people.com.cn", "cctv.com", "chinadaily.com.cn", "globaltimes.cn",
+                "scmp.com", "techcrunch.com", "theverge.com", "wired.com", "arstechnica.com", "engadget.com",
+                "gizmodo.com", "mashable.com", "buzzfeed.com", "vox.com", "businessinsider.com", "fortune.com",
+                "inc.com", "fastcompany.com", "hbr.org", "mckinsey.com", "bcg.com", "deloitte.com", "pwc.com",
+                "ey.com", "kpmg.com", "accenture.com", "ibm.com", "intel.com", "nvidia.com", "amd.com",
+                "qualcomm.com", "broadcom.com", "micron.com", "asml.com", "tsmc.com", "samsung.com", "skhynix.com"
+            ],
+            dax: [
+                "t.co", "bit.ly", "ow.ly", "goo.gl", "tinyurl.com", "is.gd", "buff.ly", "shrtco.de", "cutt.ly",
+                "shorturl.at", "x.com", "s.id", "flip.it", "v.gd", "clck.ru", "tiny.cc", "rb.gy", "short.link",
+                "9m.no", "t2m.io", "short.ly", "k.ht", "m1p.org", "d7g.net", "1v1.me", "c5k.net", "a.gg", "b.gg",
+                "q.gs", "e.gg", "short2thepoint.com", "miniurl.co", "abbr.to", "tny.im", "urls.xyz", "go2l.ink",
+                "mcaf.ee", "soo.gd", "href.li", "lnkd.in", "short.bz", "dft.ba", "0rz.tw", "alturl.com",
+                "doiop.com", "dx.doi.org", "nic.ua", "c14n.net", "cur.lv", "flic.kr", "gg.gg", "hmm.rs", "id.tl",
+                "j.mp", "korta.nu", "mylk.to", "snip.ly", "picz.in", "adf.ly", "bc.vc", "sh.st", "clk.im",
+                "ouo.io", "coc.gg", "fur.ly", "ity.im", "j.gs", "q.gs", "u.to", "v.gd", "x.co", "yep.it", "zip.net",
+                "aaa.ai", "bbb.bz", "ccc.cc", "ddd.dz", "eee.ee", "fff.ff", "ggg.gg", "hhh.hh", "iii.ii", "jjj.jj",
+                "kkk.kk", "lll.ll", "mmm.mm", "nnn.nn", "ooo.oo", "ppp.pp", "qqq.qq", "rrr.rr", "sss.ss", "ttt.tt",
+                "uuu.uu", "vvv.vv", "www.ww", "xxx.xx", "yyy.yy", "zzz.zz"
+            ]
+        };
+
+        // ─── STATE ────────────────────────────────────────────────────
+        const state = {
+            lang: localStorage.getItem(PREFIX + 'lang') || 'fa',
+            theme: localStorage.getItem(PREFIX + 'theme') || 'dark',
+            accent: localStorage.getItem(PREFIX + 'accent') || '#00b8ff',
+            animSpeed: parseFloat(localStorage.getItem(PREFIX + 'animSpeed')) || 1,
+            toastDuration: parseFloat(localStorage.getItem(PREFIX + 'toastDuration')) || 3,
+            tableDensity: parseFloat(localStorage.getItem(PREFIX + 'tableDensity')) || 1,
+            vibrate: localStorage.getItem(PREFIX + 'vibrate') === 'true',
+            sound: localStorage.getItem(PREFIX + 'sound') === 'true',
+            autoSave: localStorage.getItem(PREFIX + 'autoSave') === 'true',
+            desktopNotify: localStorage.getItem(PREFIX + 'desktopNotify') === 'true',
+            useWorker: localStorage.getItem(PREFIX + 'useWorker') !== 'false',
+            bulkScan: localStorage.getItem(PREFIX + 'bulkScan') === 'true',
+            scheduleMinutes: parseInt(localStorage.getItem(PREFIX + 'scheduleMinutes')) || 0,
+            maxHistory: parseInt(localStorage.getItem(PREFIX + 'maxHistory')) || 50,
+            sslCheck: localStorage.getItem(PREFIX + 'sslCheck') === 'true',
+            dnsResolver: localStorage.getItem(PREFIX + 'dnsResolver') || 'auto',
+            pageSize: parseInt(localStorage.getItem(PREFIX + 'pageSize')) || 150,
+            repos: {},
+            selectedRepos: new Set(['global', 'iran', 'saz', 'dax']),
+            domainLimit: 50,
+            concurrency: 6,
+            timeout: 3000,
+            results: [],
+            totalDomains: 0,
+            scanRunning: false,
+            scanPaused: false,
+            abortController: null,
+            scanStartTime: 0,
+            history: [],
+            activeFilter: null,
+            scheduleTimer: null,
+            monitorTimer: null,
+            monitorDomains: [],
+            monitorResults: {},
+            monitorLogs: [],
+            selectedRows: new Set(),
+            prevResultCount: 0,
+            chartAnimFrame: null,
+            chartAnimationProgress: { ping: 0, jitter: 0 },
+            chartNeedsFullAnimation: false,
+            renderPending: false,
+            lastRenderTime: 0,
+        };
+
+        // ─── I18N ────────────────────────────────────────────────────
+        const I18N = {
+            fa: {
+                queue: 'در صف', respond: 'پاسخگو', offlineFiltered: 'آفلاین/فیلتر',
+                avgPing: 'میانگین پینگ', fastest: 'سریع‌ترین', jitter: 'جیتر متوسط',
+                repos: 'مخازن:', domainLimit: 'محدودیت:', concurrency: 'همزمانی:', timeout: 'مهلت:',
+                status_online: 'آنلاین', status_unstable: 'ناپایدار', status_poor: 'ضعیف',
+                status_offline: 'آفلاین', status_filtered: 'فیلتر',
+                stability_stable: 'پایدار', stability_mostly_stable: 'نسبتاً پایدار', stability_unstable: 'ناپایدار',
+                sensor_checking: 'بررسی...', sensor_offline: 'آفلاین', sensor_full: 'کامل',
+                sensor_restricted: 'محدود', sensor_intl: 'بین‌المللی',
+                err_scan: 'اسکن در حال اجراست', err_nodom: 'دامنه‌ای وجود ندارد',
+                scan_done: '✅ اسکن با موفقیت پایان یافت',
+                copy_success: '📋 دامنه کپی شد', copy_fail: '❌ خطا در کپی',
+                settings_saved: '✅ تنظیمات ذخیره شد',
+                repo_saved: '✅ مخزن ذخیره شد', repo_cleared: '🗑️ مخزن پاک شد',
+                import_success: '✅ ایمپورت موفق', import_error: '❌ خطا در فایل',
+                new_repo: 'مخزن جدید', repo_name: 'نام مخزن',
+                no_results: '— نتیجه‌ای ثبت نشده —',
+                save_success: '✅ نتایج ذخیره شد', save_error: '❌ خطا در ذخیره',
+                profile_saved: '✅ پروفایل ذخیره شد', profile_loaded: '✅ پروفایل بارگذاری شد',
+                profile_deleted: '🗑️ پروفایل حذف شد', profile_exists: 'پروفایلی با این نام وجود دارد',
+                reset_confirm: 'آیا از بازنشانی همه تنظیمات اطمینان دارید؟',
+                reset_done: '✅ همه تنظیمات بازنشانی شد',
+                cache_cleared: '✅ کش اسکن پاک شد', history_cleared: '🗑️ تاریخچه پاک شد',
+                quick_scan_started: '⚡ اسکن سریع آغاز شد',
+                monitor_started: '🔔 مانیتورینگ آغاز شد', monitor_stopped: '⏹️ مانیتورینگ متوقف شد',
+                monitor_alert: '⚠️ وضعیت {domain} تغییر کرد: {old} → {new}',
+                select_domains: 'لطفاً دامنه‌ها را انتخاب کنید',
+                batch_ping: '📡 پینگ مجدد {count} دامنه',
+                start_scan: '🚀 شروع اسکن', pause: '⏸️ مکث', stop: '⏹️ توقف',
+                clear: '🧹 پاک‌سازی', check_connection: '📡 بررسی اتصال', settings: '⚙️ تنظیمات',
+                quick_scan: '⚡ اسکن سریع', history: '📜 تاریخچه', monitor: '🔔 مانیتور',
+                ping_trend: '📈 روند پینگ', jitter_dist: '📊 توزیع جیتر',
+                search_domain: '🔍 جستجوی دامنه...',
+                sort_ping: '⏱️ پینگ', sort_loss: '📉 پکت‌لاس', sort_alpha: '🔤 الفبا',
+                sort_jitter: '📊 جیتر', sort_stability: '🛡️ پایداری', sort_time: '🕒 زمان',
+                export_csv: '📤 CSV', export_json: '💾 JSON', export_pdf: '📄 PDF',
+                filter_online: '🟢 آنلاین', filter_slow: '🐢 کند', select_all: '☑️ همه',
+                batch_ping_btn: '📡 پینگ مجدد',
+                th_domain: 'دامنه', th_status: 'وضعیت', th_ping: 'پینگ', th_jitter: 'جیتر',
+                th_loss: 'پکت‌لاس', th_stability: 'پایداری', th_time: 'زمان',
+                footer: '✨ Developed by <span>THE SAZ🔱</span> — نسخه ۱.۰.۲ — تمامی عملیات در مرورگر انجام می‌شود ✨',
+                settings_title: '⚙️ تنظیمات پیشرفته',
+                tab_general: '📋 عمومی', tab_network: '🌐 شبکه', tab_appearance: '🎨 ظاهر',
+                tab_notifications: '🔔 اعلان‌ها', tab_profiles: '💼 پروفایل', tab_advanced: '🧪 پیشرفته',
+                ping_count: '🔢 تعداد پکت', ping_interval: '📏 فاصله پکت‌ها (ms)',
+                retry_count: '🔄 تلاش مجدد', table_density: '📊 تراکم جدول', page_size: '📏 نتایج در صفحه',
+                loss_threshold: '📉 آستانه پکت‌لاس (%)', jitter_threshold: '📊 آستانه جیتر (ms)',
+                min_latency: '🐢 حداقل تأخیر (ms)', ping_path: '🌐 مسیر پینگ',
+                path_favicon: '/favicon.ico', path_robots: '/robots.txt', path_both: 'هر دو',
+                ssl_check: '🔒 بررسی SSL', dns_resolver: '🌍 DNS Resolver',
+                dns_auto: 'خودکار', dns_google: 'Google (8.8.8.8)', dns_cloudflare: 'Cloudflare (1.1.1.1)',
+                dns_shecan: 'شکن',
+                accent_color: '🎨 رنگ اصلی', theme_preset: '🌈 تم آماده',
+                theme_ocean: '🌊 اقیانوس', theme_sunset: '🌅 غروب', theme_forest: '🌲 جنگل',
+                theme_neon: '💜 نئون', theme_gold: '🌟 طلایی', theme_midnight: '🌑 نیمه‌شب',
+                anim_speed: '⚡ سرعت انیمیشن', table_font: '🔤 فونت جدول (px)',
+                toast_duration: '⏳ مدت پیام (ثانیه)', vibrate: '📳 لرزش پایان',
+                sound: '🔊 صدای پایان', auto_save: '💾 ذخیره خودکار',
+                desktop_notify: '🔔 اعلان دسکتاپ',
+                profile_select: '💼 پروفایل', profile_select_option: '— انتخاب —',
+                save_profile: '💾 ذخیره', load_profile: '📥 بارگذاری', delete_profile: '🗑️ حذف',
+                reset_all: '↩️ بازنشانی', reset: 'بازنشانی',
+                use_worker: '🧵 Web Worker', bulk_scan: '📦 Bulk Scan',
+                schedule: '🕒 اسکن زمان‌بندی (دقیقه)', max_history: '📋 حداکثر تاریخچه',
+                export_settings: '📤 اکسپورت تنظیمات', import_settings: '📥 ایمپورت تنظیمات',
+                export_json_btn: 'JSON', import_file: 'فایل',
+                save_exit: '💾 ذخیره و خروج',
+                repo_title: '🗄️ مدیریت مخازن', new_repo: '➕ جدید',
+                repo_domain_count: '📊 تعداد دامنه: ', repo_unique_count: '📋 منحصربه‌فرد: ',
+                repo_placeholder: 'دامنه‌ها را خط‌به‌خط وارد کنید...',
+                add_domain_placeholder: 'دامنه جدید...', add_domain: '➕ افزودن',
+                sort_repo: '🔤 مرتب‌سازی', dedup_repo: '🧹 حذف تکراری',
+                clear_repo: '🗑️ پاک‌سازی همه', save_repo: '💾 ذخیره',
+                import_repo: '📥 ایمپورت', export_repo: '📤 اکسپورت',
+                reset_repo: '↩️ پیش‌فرض',
+                history_title: '📜 تاریخچه اسکن‌ها', clear_history: '🗑️ پاک‌سازی همه',
+                export_history: '📤 اکسپورت JSON',
+                monitor_title: '🔔 مانیتورینگ دامنه',
+                monitor_desc: 'دامنه‌های انتخاب‌شده را هر چند دقیقه یک‌بار بررسی کن و در صورت تغییر وضعیت اعلان بده.',
+                monitor_interval: '🔄 فاصله (دقیقه)',
+                monitor_domains: '📋 دامنه‌ها (خط به خط)',
+                monitor_placeholder: 'دامنه‌ها را وارد کنید...',
+                start_monitor: '▶️ شروع', stop_monitor: '⏹️ توقف',
+                clear_monitor_log: '🗑️ پاک‌سازی لاگ',
+                kbd_start: 'شروع اسکن', kbd_stop: 'توقف', kbd_export: 'اکسپورت CSV',
+                kbd_settings: 'تنظیمات', kbd_search: 'جستجو',
+                repo_hint: 'با کلیک بر روی هر کدام آن را فعال/غیرفعال کنید',
+            },
+            en: {
+                queue: 'Queue', respond: 'Resp.', offlineFiltered: 'Offline/Filtered',
+                avgPing: 'Avg Ping', fastest: 'Fastest', jitter: 'Avg Jitter',
+                repos: 'Repos:', domainLimit: 'Limit:', concurrency: 'Concurrency:', timeout: 'Timeout:',
+                status_online: 'Online', status_unstable: 'Unstable', status_poor: 'Poor',
+                status_offline: 'Offline', status_filtered: 'Filtered',
+                stability_stable: 'Stable', stability_mostly_stable: 'M.Stable', stability_unstable: 'Unstable',
+                sensor_checking: 'Checking...', sensor_offline: 'Offline', sensor_full: 'Full',
+                sensor_restricted: 'Restricted', sensor_intl: 'International',
+                err_scan: 'Scan is running', err_nodom: 'No domains',
+                scan_done: '✅ Scan completed',
+                copy_success: '📋 Copied', copy_fail: '❌ Copy failed',
+                settings_saved: '✅ Settings saved',
+                repo_saved: '✅ Repo saved', repo_cleared: '🗑️ Repo cleared',
+                import_success: '✅ Import successful', import_error: '❌ Invalid file',
+                new_repo: 'New Repo', repo_name: 'Repo Name',
+                no_results: '— No results —',
+                save_success: '✅ Results saved', save_error: '❌ Save error',
+                profile_saved: '✅ Profile saved', profile_loaded: '✅ Profile loaded',
+                profile_deleted: '🗑️ Profile deleted', profile_exists: 'Profile exists',
+                reset_confirm: 'Reset all settings?', reset_done: '✅ Reset done',
+                cache_cleared: '✅ Cache cleared', history_cleared: '🗑️ History cleared',
+                quick_scan_started: '⚡ Quick scan started',
+                monitor_started: '🔔 Monitoring started', monitor_stopped: '⏹️ Monitoring stopped',
+                monitor_alert: '⚠️ {domain} changed: {old} → {new}',
+                select_domains: 'Please select domains',
+                batch_ping: '📡 Re-pinging {count} domains',
+                start_scan: '🚀 Start Scan', pause: '⏸️ Pause', stop: '⏹️ Stop',
+                clear: '🧹 Clear', check_connection: '📡 Check Connection', settings: '⚙️ Settings',
+                quick_scan: '⚡ Quick Scan', history: '📜 History', monitor: '🔔 Monitor',
+                ping_trend: '📈 Ping Trend', jitter_dist: '📊 Jitter Distribution',
+                search_domain: '🔍 Search domain...',
+                sort_ping: '⏱️ Ping', sort_loss: '📉 Loss', sort_alpha: '🔤 Alpha',
+                sort_jitter: '📊 Jitter', sort_stability: '🛡️ Stability', sort_time: '🕒 Time',
+                export_csv: '📤 CSV', export_json: '💾 JSON', export_pdf: '📄 PDF',
+                filter_online: '🟢 Online', filter_slow: '🐢 Slow', select_all: '☑️ Select All',
+                batch_ping_btn: '📡 Re-Ping',
+                th_domain: 'Domain', th_status: 'Status', th_ping: 'Ping', th_jitter: 'Jitter',
+                th_loss: 'Loss', th_stability: 'Stability', th_time: 'Time',
+                footer: '✨ Developed by <span>THE SAZ🔱</span> — v1.0.2 — All operations done in browser ✨',
+                settings_title: '⚙️ Advanced Settings',
+                tab_general: '📋 General', tab_network: '🌐 Network', tab_appearance: '🎨 Appearance',
+                tab_notifications: '🔔 Notifications', tab_profiles: '💼 Profiles', tab_advanced: '🧪 Advanced',
+                ping_count: '🔢 Ping Count', ping_interval: '📏 Ping Interval (ms)',
+                retry_count: '🔄 Retry Count', table_density: '📊 Table Density', page_size: '📏 Page Size',
+                loss_threshold: '📉 Loss Threshold (%)', jitter_threshold: '📊 Jitter Threshold (ms)',
+                min_latency: '🐢 Min Latency (ms)', ping_path: '🌐 Ping Path',
+                path_favicon: '/favicon.ico', path_robots: '/robots.txt', path_both: 'Both',
+                ssl_check: '🔒 SSL Check', dns_resolver: '🌍 DNS Resolver',
+                dns_auto: 'Auto', dns_google: 'Google (8.8.8.8)', dns_cloudflare: 'Cloudflare (1.1.1.1)',
+                dns_shecan: 'Shecan',
+                accent_color: '🎨 Accent Color', theme_preset: '🌈 Theme Preset',
+                theme_ocean: '🌊 Ocean', theme_sunset: '🌅 Sunset', theme_forest: '🌲 Forest',
+                theme_neon: '💜 Neon', theme_gold: '🌟 Gold', theme_midnight: '🌑 Midnight',
+                anim_speed: '⚡ Animation Speed', table_font: '🔤 Table Font (px)',
+                toast_duration: '⏳ Toast Duration (s)', vibrate: '📳 Vibrate on Finish',
+                sound: '🔊 Sound on Finish', auto_save: '💾 Auto Save',
+                desktop_notify: '🔔 Desktop Notifications',
+                profile_select: '💼 Profile', profile_select_option: '— Select —',
+                save_profile: '💾 Save', load_profile: '📥 Load', delete_profile: '🗑️ Delete',
+                reset_all: '↩️ Reset All', reset: 'Reset',
+                use_worker: '🧵 Web Worker', bulk_scan: '📦 Bulk Scan',
+                schedule: '🕒 Scheduled Scan (min)', max_history: '📋 Max History',
+                export_settings: '📤 Export Settings', import_settings: '📥 Import Settings',
+                export_json_btn: 'JSON', import_file: 'File',
+                save_exit: '💾 Save & Exit',
+                repo_title: '🗄️ Repository Management', new_repo: '➕ New',
+                repo_domain_count: '📊 Domains: ', repo_unique_count: '📋 Unique: ',
+                repo_placeholder: 'Enter domains line by line...',
+                add_domain_placeholder: 'New domain...', add_domain: '➕ Add',
+                sort_repo: '🔤 Sort', dedup_repo: '🧹 Deduplicate',
+                clear_repo: '🗑️ Clear All', save_repo: '💾 Save',
+                import_repo: '📥 Import', export_repo: '📤 Export',
+                reset_repo: '↩️ Default',
+                history_title: '📜 Scan History', clear_history: '🗑️ Clear All',
+                export_history: '📤 Export JSON',
+                monitor_title: '🔔 Domain Monitoring',
+                monitor_desc: 'Check selected domains periodically and alert on status change.',
+                monitor_interval: '🔄 Interval (min)',
+                monitor_domains: '📋 Domains (one per line)',
+                monitor_placeholder: 'Enter domains...',
+                start_monitor: '▶️ Start', stop_monitor: '⏹️ Stop',
+                clear_monitor_log: '🗑️ Clear Log',
+                kbd_start: 'Start Scan', kbd_stop: 'Stop', kbd_export: 'Export CSV',
+                kbd_settings: 'Settings', kbd_search: 'Search',
+                repo_hint: 'Click each to enable/disable',
+            }
+        };
+
+        function t(key) { return I18N[state.lang]?.[key] || key; }
+
+        // ─── HELPERS ────────────────────────────────────────────────
+        const $ = id => document.getElementById(id);
+        const $$ = sel => document.querySelectorAll(sel);
+
+        function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+        function escapeHtml(s) { if (!s) return ''; const m = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;',
+                "'": '&#039;' }; return String(s).replace(/[&<>"']/g, c => m[c]); }
+
+        function formatTime(ts) { try { const d = new Date(ts); return d.toLocaleTimeString(state.lang === 'fa' ?
+                    'fa-IR' : 'en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' }); } catch (
+                _) { return ts || ''; } }
+
+        function showToast(msg, type = 'info') {
+            const container = $('toastContainer');
+            const el = document.createElement('div');
+            el.className = `toast ${type}`;
+            el.textContent = msg;
+            container.appendChild(el);
+            const d = state.toastDuration * 1000;
+            setTimeout(() => { if (el.parentNode) el.remove(); }, d + 400);
+        }
+
+        function loadRepos() {
+            try {
+                const stored = localStorage.getItem(PREFIX + 'repos');
+                if (stored) { state.repos = JSON.parse(stored); for (const k of Object.keys(DEFAULT_REPOS)) { if (!
+                            state.repos[k] || !Array.isArray(state.repos[k])) state.repos[k] = [...DEFAULT_REPOS[
+                            k]]; } return; }
+            } catch (_) {}
+            state.repos = JSON.parse(JSON.stringify(DEFAULT_REPOS));
+            saveRepos();
+        }
+
+        function saveRepos() { localStorage.setItem(PREFIX + 'repos', JSON.stringify(state.repos)); }
+
+        function loadHistory() { try { state.history = JSON.parse(localStorage.getItem(PREFIX + 'history') ||
+                        '[]'); } catch (_) { state.history = []; } }
+
+        function saveHistory() { if (state.history.length > state.maxHistory) state.history = state.history.slice(0,
+                    state.maxHistory);
+            localStorage.setItem(PREFIX + 'history', JSON.stringify(state.history)); }
+        loadRepos();
+        loadHistory();
+
+        // ─── THEME ────────────────────────────────────────────────────
+        function applyTheme() {
+            document.body.classList.toggle('light', state.theme === 'light');
+            document.documentElement.style.setProperty('--accent', state.accent);
+            document.documentElement.style.setProperty('--accent-glow', state.accent);
+            document.documentElement.style.setProperty('--anim-speed', (0.28 / state.animSpeed) + 's');
+            document.documentElement.style.setProperty('--table-density', state.tableDensity);
+            const els = ['accentColor', 'animSpeedSlider', 'toastDuration', 'tableDensity', 'vibrateCheck',
+                'soundCheck', 'autoSaveCheck', 'desktopNotifyCheck', 'useWorker', 'bulkScan', 'sslCheck',
+                'scheduleMinutes', 'maxHistory', 'pageSize', 'dnsResolver'
+            ];
+            for (const id of els) { const el = $(id); if (el) { if (el.type === 'checkbox') el.checked = state[
+                        id.replace(/Check$/, '')] || state[id] || false;
+                    else if (el.type === 'number' || el.type === 'text' || el.tagName === 'SELECT') el.value = state[
+                        id] || ''; } }
+            if ($('accentColor')) $('accentColor').value = state.accent;
+            const preset = $('themePreset');
+            if (preset) {
+                const colors = { ocean: '#00b8ff', sunset: '#f77f00', forest: '#2d6a4f', neon: '#9d4edd',
+                    gold: '#f4a261', midnight: '#6366f1' };
+                for (const [key, val] of Object.entries(colors)) {
+                    if (state.accent === val) { preset.value = key; break; }
+                }
+            }
+            Object.entries({ theme: state.theme, accent: state.accent, animSpeed: state.animSpeed,
+                    toastDuration: state.toastDuration, tableDensity: state.tableDensity, vibrate: state.vibrate,
+                    sound: state.sound, autoSave: state.autoSave, desktopNotify: state.desktopNotify,
+                    useWorker: state.useWorker, bulkScan: state.bulkScan, scheduleMinutes: state
+                    .scheduleMinutes, maxHistory: state.maxHistory, sslCheck: state.sslCheck,
+                    dnsResolver: state.dnsResolver, pageSize: state.pageSize
+                })
+                .forEach(([k, v]) => localStorage.setItem(PREFIX + k, v));
+        }
+
+        // ─── LANGUAGE ────────────────────────────────────────────────
+        function applyLanguage() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (key) {
+                    if (el.hasAttribute('data-i18n-placeholder')) {
+                        el.placeholder = t(key);
+                    } else {
+                        el.innerHTML = t(key);
+                    }
+                }
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (key) el.placeholder = t(key);
+            });
+            ['queue', 'respond', 'offlineFiltered', 'avgPing', 'fastest', 'jitter', 'repos', 'domainLimit',
+                'concurrency', 'timeout'
+            ].forEach(k => { const el = $('lbl' + k.charAt(0).toUpperCase() + k.slice(1)); if (el) el.textContent =
+                    t(k); });
+            const lt = $('langToggle');
+            if (lt) lt.textContent = state.lang === 'fa' ? '🇬🇧' : '🇮🇷';
+            document.dir = state.lang === 'fa' ? 'rtl' : 'ltr';
+            document.title = state.lang === 'fa' ? 'SNI Scanner Pro v1.0.2 — اسکنر حرفه‌ای شبکه' :
+                'SNI Scanner Pro v1.0.2 — Professional Network Scanner';
+            const pauseBtn = $('pauseResumeBtn');
+            if (pauseBtn && state.scanPaused) {
+                pauseBtn.textContent = '▶️ ' + (state.lang === 'fa' ? 'ادامه' : 'Resume');
+            }
+            renderTable();
+            updateSensorDisplay();
+            localStorage.setItem(PREFIX + 'lang', state.lang);
+        }
+
+        // ─── SENSOR ──────────────────────────────────────────────────
+        let lastSensor = '';
+
+        function updateSensorDisplay() {
+            const map = { offline: t('sensor_offline'), full: t('sensor_full'), restricted: t(
+                    'sensor_restricted'), intl: t('sensor_intl') };
+            const st = $('sensorText');
+            if (st) st.textContent = lastSensor ? `📡 ${map[lastSensor] || lastSensor}` : `📡 ${t('sensor_checking')}`;
+            const dot = $('sensorDot');
+            if (!dot) return;
+            dot.className = 'sensor-dot';
+            if (lastSensor === 'full' || lastSensor === 'intl') dot.classList.add('online');
+            else if (lastSensor === 'restricted') dot.classList.add('restricted');
+            else if (lastSensor === 'offline') dot.classList.add('offline');
+        }
+
+        async function checkConnectivity() {
+            if (!$('sensorText')) return;
+            $('sensorText').textContent = '📡 ' + t('sensor_checking');
+            const dot = $('sensorDot');
+            if (dot) dot.className = 'sensor-dot';
+            const intlDomains = ['google.com', 'cloudflare.com', 'azure.com'];
+            const iranDomains = ['digikala.com', 'aparat.com', 'snapp.ir'];
+            const minLat = +($('minLatency')?.value || 55);
+
+            async function probe(domain) {
+                const url = `https://${domain}/favicon.ico?_=${Date.now()}`;
+                return new Promise(resolve => {
+                    const img = new Image();
+                    let done = false;
+                    const timer = setTimeout(() => { if (!done) { done = true;
+                            img.src = '';
+                            resolve(false); } }, 3000);
+                    img.onload = () => { if (done) return;
+                        done = true;
+                        clearTimeout(timer);
+                        let lat = 0;
+                        try { const e = performance.getEntriesByName(url); if (e.length) lat = e[0]
+                                .responseEnd - e[0].fetchStart || 0; } catch (_) {}
+                        performance.clearResourceTimings();
+                        resolve(lat > minLat); };
+                    img.onerror = () => { if (done) return;
+                        done = true;
+                        clearTimeout(timer);
+                        resolve(false); };
+                    img.src = url;
+                });
+            }
+
+            async function testGroup(list) { for (const d of list) { if (await probe(d)) return true; } return false; }
+            try {
+                const intlOk = await testGroup(intlDomains);
+                const iranOk = await testGroup(iranDomains);
+                if (!intlOk && !iranOk) lastSensor = 'offline';
+                else if (intlOk && iranOk) lastSensor = 'full';
+                else if (!intlOk && iranOk) lastSensor = 'restricted';
+                else lastSensor = 'intl';
+            } catch (_) { lastSensor = 'offline'; }
+            updateSensorDisplay();
+        }
+
+        // ─── PING ENGINE ─────────────────────────────────────────────
+        const PING_PATHS = ['/favicon.ico', '/robots.txt'];
+
+        function getAdaptiveTimeout(baseTimeout) {
+            if (state.results.length > 5) {
+                const online = state.results.filter(r => r.status === 'online');
+                if (online.length > 0) {
+                    const avg = online.reduce((s, r) => s + r.avgPing, 0) / online.length;
+                    if (avg > 500) return Math.min(baseTimeout * 2.5, 8000);
+                    if (avg > 300) return Math.min(baseTimeout * 1.8, 6000);
+                    if (avg > 150) return Math.min(baseTimeout * 1.3, 4500);
+                    if (avg < 50) return Math.max(baseTimeout * 0.6, 500);
+                }
+            }
+            return baseTimeout;
+        }
+
+        function pingDomain(domain, timeout, retries, minLat, pathMode) {
+            return new Promise(resolve => {
+                let attempts = 0,
+                    pathIndex = 0;
+
+                function tryPing() {
+                    if (state.abortController?.signal.aborted) return resolve({ success: false, time: timeout,
+                        aborted: true });
+                    let path;
+                    if (pathMode === 'favicon') path = '/favicon.ico';
+                    else if (pathMode === 'robots') path = '/robots.txt';
+                    else { path = PING_PATHS[pathIndex % PING_PATHS.length];
+                        pathIndex++; }
+                    const url = `https://${domain}${path}?_=${Date.now()}`;
+                    const img = new Image();
+                    let resolved = false;
+                    const timer = setTimeout(() => {
+                        if (!resolved) { resolved = true;
+                            img.src = '';
+                            if (attempts < retries) { attempts++;
+                                tryPing(); } else resolve({ success: false, time: timeout,
+                                lost: true }); }
+                    }, timeout);
+                    img.onload = () => {
+                        if (resolved) return;
+                        resolved = true;
+                        clearTimeout(timer);
+                        let lat = 0;
+                        try { const e = performance.getEntriesByName(url); if (e.length) lat = e[0]
+                                .responseEnd - e[0].fetchStart || 0; } catch (_) {}
+                        performance.clearResourceTimings();
+                        const filtered = (img.naturalWidth <= 2 && img.naturalHeight <= 2) || lat < minLat;
+                        if (filtered) { if (attempts < retries) { attempts++;
+                                tryPing(); } else resolve({ success: false, time: timeout,
+                                filtered: true }); } else resolve({ success: true, time: lat });
+                    };
+                    img.onerror = () => {
+                        if (resolved) return;
+                        resolved = true;
+                        clearTimeout(timer);
+                        if (attempts < retries) { attempts++;
+                            tryPing(); } else resolve({ success: false, time: timeout, lost: true });
+                    };
+                    img.src = url;
+                }
+                tryPing();
+            });
+        }
+
+        async function scanDomain(domain, config) {
+            const { pingCount, timeout, interval, retries, minLat, pathMode } = config;
+            const adaptiveTimeout = getAdaptiveTimeout(timeout);
+            const times = [];
+            let lost = 0,
+                filtered = 0;
+            for (let i = 0; i < pingCount; i++) {
+                if (state.abortController?.signal.aborted) throw new Error('Aborted');
+                while (state.scanPaused) { await sleep(50); if (state.abortController?.signal.aborted) throw new Error(
+                        'Aborted'); }
+                const res = await pingDomain(domain, adaptiveTimeout, retries, minLat, pathMode);
+                if (res.aborted) throw new Error('Aborted');
+                if (res.success) times.push(res.time);
+                else if (res.filtered) filtered++;
+                else lost++;
+                if (i < pingCount - 1) await sleep(interval);
+            }
+            const totalLost = lost + filtered;
+            const avgPing = times.length ? Math.round(times.reduce((a, b) => a + b, 0) / times.length) : timeout;
+            let jitter = 0;
+            if (times.length > 1) { let s = 0; for (let i = 1; i < times.length; i++) s += Math.abs(times[i] - times[
+                        i - 1]);
+                jitter = Math.round(s / (times.length - 1)); }
+            const lossPercent = Math.round((totalLost / pingCount) * 100);
+            const lossThresh = +($('lossThreshold')?.value || 20);
+            let status;
+            if (filtered === pingCount) status = 'filtered';
+            else if (lossPercent === 100) status = 'offline';
+            else if (lossPercent > 50) status = 'poor';
+            else if (lossPercent > lossThresh) status = 'unstable';
+            else status = 'online';
+            const jitterStable = +($('jitterStable')?.value || 50);
+            let stability = 'unstable';
+            if (status === 'online') { if (jitter < jitterStable) stability = 'stable';
+                else if (jitter < jitterStable * 2) stability = 'mostly-stable'; }
+            return { domain, status, avgPing, jitter, lossPercent, stability, timestamp: Date.now() };
+        }
+
+        // ─── STATS ────────────────────────────────────────────────────
+        function updateStats() {
+            const responding = state.results.filter(r => r.status === 'online' || r.status === 'unstable' || r
+                .status === 'poor');
+            const offlineFiltered = state.results.filter(r => r.status === 'offline' || r.status === 'filtered');
+            const qc = $('queueCount');
+            const rc = $('respondCount');
+            const ofc = $('offlineFilteredCount');
+            const aps = $('avgPingStat');
+            const fd = $('fastestDomain');
+            const ajs = $('avgJitterStat');
+            if (qc) qc.textContent = Math.max(0, state.totalDomains - state.results.length);
+            if (rc) rc.textContent = responding.length;
+            if (ofc) ofc.textContent = offlineFiltered.length;
+            if (aps) aps.textContent = responding.length ? Math.round(responding.reduce((a, b) => a + b.avgPing, 0) /
+                responding.length) + ' ms' : '—';
+            const fastest = responding.reduce((m, r) => r.avgPing < m.avgPing ? r : m, { avgPing: Infinity });
+            if (fd) fd.textContent = responding.length ? fastest.domain : '—';
+            if (ajs) ajs.textContent = responding.length ? Math.round(responding.reduce((a, b) => a + b.jitter, 0) /
+                responding.length) + ' ms' : '—';
+        }
+
+        // ─── CHART ────────────────────────────────────────────────────
+        function drawCharts(animate = true) {
+            const data = state.results.filter(r => r.status === 'online' || r.status === 'unstable' || r.status ===
+                'poor');
+            if (data.length < 2) {
+                ['pingChart', 'jitterChart'].forEach(id => {
+                    const c = $(id);
+                    if (!c) return;
+                    const ctx = c.getContext('2d');
+                    const dpr = window.devicePixelRatio || 1;
+                    const W = c.width / dpr;
+                    const H = c.height / dpr;
+                    ctx.clearRect(0, 0, W, H);
+                    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text-muted')
+                        .trim() || '#6a8aaa';
+                    ctx.font = '10px var(--font)';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('📊 ' + (state.lang === 'fa' ? 'داده کافی نیست' : 'Not enough data'), W / 2, H / 2 +
+                        4);
+                });
+                return;
+            }
+
+            const slice = data.slice(-60);
+            const pingCanvas = $('pingChart');
+            const jitterCanvas = $('jitterChart');
+
+            if (state.chartNeedsFullAnimation) {
+                state.chartAnimationProgress.ping = 0;
+                state.chartAnimationProgress.jitter = 0;
+                if (state.chartAnimFrame) cancelAnimationFrame(state.chartAnimFrame);
+                const startTime = performance.now();
+                const duration = 600;
+                const step = (timestamp) => {
+                    const elapsed = timestamp - startTime;
+                    const p = Math.min(elapsed / duration, 1);
+                    const eased = 1 - Math.pow(1 - p, 3);
+                    state.chartAnimationProgress.ping = eased;
+                    state.chartAnimationProgress.jitter = eased;
+                    drawSingleChart(pingCanvas, slice.map(r => r.avgPing), state.accent, 'پینگ', eased);
+                    drawSingleChart(jitterCanvas, slice.map(r => r.jitter), '#a78bfa', 'جیتر', eased);
+                    if (p < 1) {
+                        state.chartAnimFrame = requestAnimationFrame(step);
+                    } else {
+                        state.chartAnimationProgress.ping = 1;
+                        state.chartAnimationProgress.jitter = 1;
+                        drawSingleChart(pingCanvas, slice.map(r => r.avgPing), state.accent, 'پینگ', 1);
+                        drawSingleChart(jitterCanvas, slice.map(r => r.jitter), '#a78bfa', 'جیتر', 1);
+                        state.chartAnimFrame = null;
+                        state.chartNeedsFullAnimation = false;
+                    }
+                };
+                state.chartAnimFrame = requestAnimationFrame(step);
+                return;
+            }
+
+            drawSingleChart(pingCanvas, slice.map(r => r.avgPing), state.accent, 'پینگ', 1);
+            drawSingleChart(jitterCanvas, slice.map(r => r.jitter), '#a78bfa', 'جیتر', 1);
+            if (state.chartAnimFrame) {
+                cancelAnimationFrame(state.chartAnimFrame);
+                state.chartAnimFrame = null;
+            }
+        }
+
+        function drawSingleChart(canvas, values, color, label, progress = 1) {
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            const W = canvas.width / dpr;
+            const H = canvas.height / dpr;
+            ctx.clearRect(0, 0, W, H);
+
+            if (values.length < 2) {
+                ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text-muted')
+                .trim() || '#6a8aaa';
+                ctx.font = '10px var(--font)';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('📊 ' + (state.lang === 'fa' ? 'داده کافی نیست' : 'Not enough data'), W / 2, H / 2 + 4);
+                return;
+            }
+
+            const pad = { top: 4, bottom: 12, left: 20, right: 4 };
+            const cw = W - pad.left - pad.right;
+            const ch = H - pad.top - pad.bottom;
+            const maxVal = Math.max(1, ...values) * 1.15;
+            const count = Math.max(2, Math.floor(values.length * progress));
+
+            ctx.beginPath();
+            ctx.moveTo(pad.left, pad.top + ch);
+            for (let i = 0; i < count; i++) {
+                const x = pad.left + (i / (values.length - 1)) * cw;
+                const y = pad.top + ch - (values[i] / maxVal) * ch;
+                if (i === 0) ctx.lineTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            if (count < values.length) {
+                const lastX = pad.left + ((count - 1) / (values.length - 1)) * cw;
+                ctx.lineTo(lastX, pad.top + ch);
+            } else {
+                ctx.lineTo(pad.left + cw, pad.top + ch);
+            }
+            ctx.closePath();
+            const grad = ctx.createLinearGradient(0, pad.top, 0, pad.top + ch);
+            grad.addColorStop(0, color + '40');
+            grad.addColorStop(1, color + '05');
+            ctx.fillStyle = grad;
+            ctx.fill();
+
+            ctx.beginPath();
+            for (let i = 0; i < count; i++) {
+                const x = pad.left + (i / (values.length - 1)) * cw;
+                const y = pad.top + ch - (values[i] / maxVal) * ch;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+            ctx.shadowColor = color;
+            ctx.shadowBlur = 8;
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            for (let i = 0; i < count; i++) {
+                const x = pad.left + (i / (values.length - 1)) * cw;
+                const y = pad.top + ch - (values[i] / maxVal) * ch;
+                ctx.beginPath();
+                ctx.arc(x, y, 2.5, 0, 2 * Math.PI);
+                ctx.fillStyle = color;
+                ctx.shadowColor = color;
+                ctx.shadowBlur = 6;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+
+            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text-muted')
+            .trim() || '#6a8aaa';
+            ctx.font = '6px var(--mono)';
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'top';
+            ctx.fillText(Math.round(maxVal) + 'ms', pad.left - 2, pad.top + 2);
+            ctx.textBaseline = 'bottom';
+            ctx.fillText('0ms', pad.left - 2, pad.top + ch);
+        }
+
+        // ─── TABLE RENDER ────────────────────────────────────────────
+        let renderTimeout = null;
+
+        function sortResults(criteria) {
+            const s = criteria || ($('sortSelect')?.value || 'ping');
+            const order = { stable: 0, 'mostly-stable': 1, unstable: 2 };
+            switch (s) {
+                case 'loss':
+                    state.results.sort((a, b) => a.lossPercent - b.lossPercent || a.avgPing - b.avgPing);
+                    break;
+                case 'ping':
+                    state.results.sort((a, b) => a.avgPing - b.avgPing);
+                    break;
+                case 'alpha':
+                    state.results.sort((a, b) => a.domain.localeCompare(b.domain));
+                    break;
+                case 'jitter':
+                    state.results.sort((a, b) => a.jitter - b.jitter);
+                    break;
+                case 'stability':
+                    state.results.sort((a, b) => (order[a.stability] ?? 3) - (order[b.stability] ?? 3) || a
+                        .avgPing - b.avgPing);
+                    break;
+                case 'time':
+                    state.results.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                    break;
+            }
+        }
+
+        function renderTable() {
+            const now = Date.now();
+            if (now - state.lastRenderTime < 80) {
+                if (!state.renderPending) {
+                    state.renderPending = true;
+                    requestAnimationFrame(() => {
+                        state.renderPending = false;
+                        renderTable();
+                    });
+                }
+                return;
+            }
+            state.lastRenderTime = now;
+
+            sortResults();
+            let results = [...state.results];
+            if (state.activeFilter === 'online') results = results.filter(r => r.status === 'online');
+            if (state.activeFilter === 'slow') results = results.filter(r => r.avgPing > 200);
+            const search = ($('searchInput')?.value || '').toLowerCase();
+            results = results.filter(r => r.domain.includes(search));
+            const pageSize = state.pageSize || 150;
+            const paginated = results.slice(0, pageSize);
+            const fontSize = +($('tableFontSize')?.value || 12);
+            const tbody = $('tableBody');
+            if (!tbody) return;
+            if (!paginated.length) {
+                tbody.innerHTML =
+                    `<tr><td colspan="9" style="text-align:center;padding:18px;color:var(--text-muted);font-size:0.65rem;">${t('no_results')}</td></tr>`;
+                updateStats();
+                drawCharts(false);
+                return;
+            }
+            let html = '';
+            for (let i = 0; i < paginated.length; i++) {
+                const r = paginated[i];
+                const safe = escapeHtml(r.domain);
+                const statusLabel = t('status_' + r.status) || r.status;
+                const stabilityLabel = t('stability_' + r.stability) || r.stability;
+                const idx = i + 1;
+                const checked = state.selectedRows.has(r.domain) ? '☑️' : '⬜';
+                html += `<tr style="font-size:${fontSize}px">
+                    <td style="text-align:center;cursor:pointer;" class="row-select" data-domain="${escapeHtml(r.domain)}">${checked}</td>
+                    <td><span style="font-weight:500;">${safe}</span> <button class="copy-btn" data-domain="${escapeHtml(r.domain)}" title="کپی">📋</button></td>
+                    <td><span class="badge ${r.status}">${statusLabel}</span></td>
+                    <td class="mono">${r.avgPing}</td>
+                    <td class="mono">${r.jitter}</td>
+                    <td class="mono">${r.lossPercent}%</td>
+                    <td><span class="badge ${r.stability}">${stabilityLabel}</span></td>
+                    <td>${formatTime(r.timestamp)}</td>
+                    <td><button class="row-detail-btn" data-domain="${escapeHtml(r.domain)}" title="جزئیات">🔍</button></td>
+                </tr>`;
+            }
+            tbody.innerHTML = html;
+
+            tbody.querySelectorAll('.copy-btn').forEach(btn => {
+                btn.addEventListener('click', e => { e.stopPropagation();
+                    copyToClipboard(btn.dataset.domain); });
+            });
+            tbody.querySelectorAll('.row-select').forEach(el => {
+                el.addEventListener('click', () => {
+                    const domain = el.dataset.domain;
+                    if (state.selectedRows.has(domain)) state.selectedRows.delete(domain);
+                    else state.selectedRows.add(domain);
+                    renderTable();
+                });
+            });
+            tbody.querySelectorAll('.row-detail-btn').forEach(btn => {
+                btn.addEventListener('click', e => {
+                    e.stopPropagation();
+                    const domain = btn.dataset.domain;
+                    const row = state.results.find(r => r.domain === domain);
+                    if (!row) return;
+                    showToast(`📊 ${domain} — ${t('th_ping')}: ${row.avgPing}ms | ${t('th_jitter')}: ${row.jitter}ms | ${t('th_loss')}: ${row.lossPercent}% | ${t('th_stability')}: ${row.stability}`,
+                        'info');
+                });
+            });
+
+            updateStats();
+            requestAnimationFrame(() => {
+                resizeCharts(true);
+                drawCharts(true);
+            });
+        }
+
+        function scheduleRender() {
+            if (renderTimeout) clearTimeout(renderTimeout);
+            renderTimeout = setTimeout(() => { renderTable();
+                renderTimeout = null; }, 80);
+        }
+
+        // ─── SCAN ENGINE ─────────────────────────────────────────────
+        function stopAll() {
+            if (state.abortController) {
+                try { state.abortController.abort(); } catch (_) {}
+                state.abortController = null;
+            }
+            state.scanRunning = false;
+            state.scanPaused = false;
+            const start = $('startScanBtn');
+            const pause = $('pauseResumeBtn');
+            const stop = $('stopScanBtn');
+            const clear = $('clearResultsBtn');
+            if (start) { start.style.display = 'inline-flex';
+                start.disabled = false; }
+            if (pause) pause.style.display = 'none';
+            if (stop) stop.style.display = 'none';
+            if (clear) clear.disabled = false;
+            if (state.scheduleTimer) { clearInterval(state.scheduleTimer);
+                state.scheduleTimer = null; }
+        }
+
+        async function runScan(domainsOverride = null) {
+            if (state.scanRunning) { showToast(t('err_scan'), 'warning'); return; }
+            let domains = domainsOverride;
+            if (!domains) {
+                domains = [];
+                for (const key of state.selectedRepos) { if (state.repos[key]) domains.push(...state.repos[key]); }
+                domains = [...new Set(domains)];
+            }
+            if (!domains.length) { showToast(t('err_nodom'), 'error'); return; }
+            state.domainLimit = +($('domainLimitSlider')?.value || 50);
+            domains = domains.slice(0, state.domainLimit);
+            if (!domains.length) return;
+
+            stopAll();
+
+            state.scanRunning = true;
+            state.scanPaused = false;
+            state.abortController = new AbortController();
+            state.results = [];
+            state.totalDomains = domains.length;
+            state.scanStartTime = Date.now();
+            state.selectedRows.clear();
+            state.chartNeedsFullAnimation = true;
+
+            const start = $('startScanBtn');
+            const pause = $('pauseResumeBtn');
+            const stop = $('stopScanBtn');
+            const clear = $('clearResultsBtn');
+            const pf = $('progressFill');
+            if (start) { start.style.display = 'none';
+                start.disabled = true; }
+            if (pause) { pause.style.display = 'inline-flex';
+                pause.textContent = '⏸️ ' + t('pause'); }
+            if (stop) stop.style.display = 'inline-flex';
+            if (clear) clear.disabled = true;
+            if (pf) pf.style.width = '0%';
+
+            scheduleRender();
+
+            const config = {
+                pingCount: +($('pingCount')?.value || 4),
+                timeout: +($('timeoutSlider')?.value || 3000),
+                interval: +($('pingInterval')?.value || 200),
+                retries: +($('retryCount')?.value || 2),
+                minLat: +($('minLatency')?.value || 55),
+                pathMode: ($('pingPaths')?.value || 'both'),
+                concurrency: Math.min(+($('concurrencySlider')?.value || 6), domains.length),
+            };
+
+            let completed = 0;
+            const total = domains.length;
+            let index = 0;
+            const signal = state.abortController.signal;
+
+            const worker = async () => {
+                while (index < domains.length && !signal.aborted) {
+                    if (signal.aborted) break;
+                    const i = index++;
+                    const domain = domains[i];
+                    try {
+                        if (signal.aborted) break;
+                        const res = await scanDomain(domain, config);
+                        if (!signal.aborted) {
+                            state.results.push(res);
+                            completed++;
+                            if (pf) pf.style.width = ((completed / total) * 100) + '%';
+                            scheduleRender();
+                        }
+                    } catch (err) {
+                        if (err.message === 'Aborted' || signal.aborted) break;
+                        if (!signal.aborted) {
+                            state.results.push({ domain, status: 'offline', avgPing: config.timeout,
+                                jitter: 0, lossPercent: 100, stability: 'unstable',
+                                timestamp: Date.now() });
+                            completed++;
+                            if (pf) pf.style.width = ((completed / total) * 100) + '%';
+                            scheduleRender();
+                        }
+                    }
+                    if (signal.aborted) break;
+                }
+            };
+
+            const workers = [];
+            const workerCount = Math.min(config.concurrency, domains.length);
+            for (let i = 0; i < workerCount; i++) {
+                workers.push(worker());
+            }
+            await Promise.all(workers);
+
+            if (!signal.aborted) {
+                if (state.vibrate && navigator.vibrate) navigator.vibrate(200);
+                if (state.sound) {
+                    try { const ctx = new(window.AudioContext || window.webkitAudioContext)();
+                        const osc = ctx.createOscillator();
+                        osc.frequency.value = 880;
+                        osc.connect(ctx.destination);
+                        osc.start();
+                        osc.stop(ctx.currentTime + 0.15); } catch (_) {}
+                }
+                if (state.desktopNotify && 'Notification' in window && Notification.permission === 'granted') {
+                    try { new Notification('SNI Scanner Pro', { body: t('scan_done'), icon: '🌐' }); } catch (
+                    _) {}
+                }
+                showToast(t('scan_done'), 'success');
+                if (state.autoSave) saveResultsToFile();
+                state.history.unshift({
+                    date: Date.now(),
+                    total,
+                    results: state.results.length,
+                    domains: state.results.map(r => r.domain),
+                    avgPing: state.results.reduce((s, r) => s + r.avgPing, 0) / state.results.length || 0,
+                    offline: state.results.filter(r => r.status === 'offline' || r.status === 'filtered')
+                        .length
+                });
+                if (state.history.length > state.maxHistory) state.history = state.history.slice(0, state
+                    .maxHistory);
+                saveHistory();
+            }
+
+            stopAll();
+            scheduleRender();
+        }
+
+        // ─── EXPORT ──────────────────────────────────────────────────
+        function saveResultsToFile() {
+            if (!state.results.length) { showToast(t('no_results'), 'warning'); return; }
+            try {
+                const data = JSON.stringify(state.results, null, 2);
+                const blob = new Blob([data], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `scan_${Date.now()}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast(t('save_success'), 'success');
+            } catch (_) { showToast(t('save_error'), 'error'); }
+        }
+
+        function exportCSV() {
+            if (!state.results.length) { showToast(t('no_results'), 'warning'); return; }
+            const header = 'domain,status,ping,jitter,loss,stability,timestamp\n';
+            const rows = state.results.map(r =>
+                `"${r.domain}","${r.status}",${r.avgPing},${r.jitter},${r.lossPercent},"${r.stability}",${r.timestamp}`
+                ).join('\n');
+            const blob = new Blob([header + rows], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `scan_${Date.now()}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function exportPDF() {
+            if (!state.results.length) { showToast(t('no_results'), 'warning'); return; }
+            try {
+                const win = window.open('', '_blank');
+                if (!win) { showToast('لطفاً بازشونده‌ها را مجاز کنید', 'warning'); return; }
+                const rows = state.results.slice(0, 50).map(r =>
+                    `<tr><td>${escapeHtml(r.domain)}</td><td>${r.status}</td><td>${r.avgPing}</td><td>${r.jitter}</td><td>${r.lossPercent}%</td><td>${r.stability}</td></tr>`
+                    ).join('');
+                win.document.write(`
+                    <html><head><title>SNI Scanner Report</title>
+                    <style>body{font-family:sans-serif;padding:20px;direction:ltr;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #ccc;padding:4px 8px;text-align:left;}th{background:#f0f0f0;}
+                </style></head>
+                <body><h1>SNI Scanner Pro — Report</h1><p>${new Date().toLocaleString()}</p><table><thead><tr><th>Domain</th><th>Status</th><th>Ping</th><th>Jitter</th><th>Loss</th><th>Stability</th></tr></thead><tbody>${rows}</tbody></table></body></html>`);
+                win.document.close();
+                win.print();
+            } catch (_) { showToast('خطا در ایجاد PDF', 'error'); }
+        }
+
+        // ─── COPY ──────────────────────────────────────────────────
+        async function copyToClipboard(text) {
+            try { await navigator.clipboard.writeText(text);
+                showToast(t('copy_success'), 'success'); } catch (_) {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none;';
+                document.body.appendChild(ta);
+                ta.select();
+                try { document.execCommand('copy');
+                    showToast(t('copy_success'), 'success'); } catch (__) { showToast(t('copy_fail'), 'error'); }
+                document.body.removeChild(ta);
+            }
+        }
+
+        // ─── REPO UI ─────────────────────────────────────────────────
+        function populateRepoSelect() {
+            const sel = $('repoSelect');
+            if (!sel) return;
+            sel.innerHTML = '';
+            for (const key of Object.keys(state.repos)) {
+                const opt = document.createElement('option');
+                opt.value = key;
+                const count = state.repos[key]?.length || 0;
+                opt.textContent = `${key.charAt(0).toUpperCase() + key.slice(1)} (${count})`;
+                sel.appendChild(opt);
+            }
+        }
+
+        function loadRepoTextarea() {
+            const key = ($('repoSelect')?.value);
+            const ta = $('repoTextarea');
+            if (!ta || !key) return;
+            ta.value = state.repos[key]?.join('\n') || '';
+            updateRepoStats(key);
+            renderDomainList(key);
+        }
+
+        function updateRepoStats(key) {
+            const domains = state.repos[key] || [];
+            const unique = new Set(domains);
+            const countEl = $('repoDomainCount');
+            const uniqueEl = $('repoUniqueCount');
+            if (countEl) countEl.textContent = domains.length;
+            if (uniqueEl) uniqueEl.textContent = unique.size;
+        }
+
+        function renderDomainList(key) {
+            const list = $('repoDomainList');
+            if (!list) return;
+            const domains = state.repos[key] || [];
+            if (!domains.length) {
+                list.innerHTML = '<div style="text-align:center;padding:8px;color:var(--text-muted);font-size:0.55rem;">' + (state
+                    .lang === 'fa' ? 'هیچ دامنه‌ای وجود ندارد' : 'No domains') + '</div>';
+                return;
+            }
+            let html = '';
+            domains.forEach((d, idx) => {
+                html += `<div class="repo-domain-item">
+                    <span>${escapeHtml(d)}</span>
+                    <button class="remove-domain" data-index="${idx}" title="حذف">✕</button>
+                </div>`;
+            });
+            list.innerHTML = html;
+            list.querySelectorAll('.remove-domain').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const idx = parseInt(btn.dataset.index);
+                    const key = $('repoSelect')?.value;
+                    if (!key) return;
+                    state.repos[key].splice(idx, 1);
+                    saveRepos();
+                    loadRepoTextarea();
+                    updateRepoSliders();
+                    showToast(state.lang === 'fa' ? 'دامنه حذف شد' : 'Domain removed', 'info');
+                });
+            });
+        }
+
+        function updateRepoSliders() {
+            let total = 0;
+            for (const key of state.selectedRepos) { if (state.repos[key]) total += state.repos[key].length; }
+            const slider = $('domainLimitSlider');
+            if (!slider) return;
+            slider.max = Math.max(total, 1);
+            if (+slider.value > total) slider.value = total;
+            const val = +slider.value;
+            const dlv = $('domainLimitValue');
+            if (dlv) dlv.textContent = val;
+            state.domainLimit = val;
+        }
+
+        // ─── MODALS ──────────────────────────────────────────────────
+        function openModal(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.classList.add('active');
+                document.body.classList.add('modal-open');
+            }
+        }
+
+        function closeModal(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.classList.remove('active');
+                document.body.classList.remove('modal-open');
+            }
+        }
+
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', function(e) { if (e.target === this) closeModal(this.id); });
+        });
+
+        // ─── SETTINGS ──────────────────────────────────────────────
+        function refreshProfileSelect() {
+            const sel = $('profileSelect');
+            if (!sel) return;
+            const profiles = getProfiles();
+            sel.innerHTML = '<option value="" data-i18n="profile_select_option">— انتخاب —</option>';
+            for (const name of Object.keys(profiles)) {
+                const opt = document.createElement('option');
+                opt.value = name;
+                opt.textContent = name;
+                sel.appendChild(opt);
+            }
+            sel.querySelectorAll('option').forEach(opt => {
+                const key = opt.getAttribute('data-i18n');
+                if (key) opt.textContent = t(key);
+            });
+        }
+
+        function getProfiles() {
+            try { return JSON.parse(localStorage.getItem(PREFIX + 'profiles') || '{}'); } catch (_) { return {}; }
+        }
+
+        function saveProfiles(p) { localStorage.setItem(PREFIX + 'profiles', JSON.stringify(p)); }
+
+        // ─── MONITOR ─────────────────────────────────────────────────
+        function updateMonitorLog(msg, type = 'info') {
+            state.monitorLogs.unshift({ time: Date.now(), msg, type });
+            if (state.monitorLogs.length > 100) state.monitorLogs = state.monitorLogs.slice(0, 100);
+            renderMonitorLog();
+        }
+
+        function renderMonitorLog() {
+            const container = $('monitorHistory');
+            if (!container) return;
+            if (!state.monitorLogs.length) {
+                container.innerHTML =
+                    '<div style="text-align:center;color:var(--text-muted);padding:8px;font-size:0.55rem;">لاگ مانیتورینگ</div>';
+                return;
+            }
+            let html = '';
+            state.monitorLogs.forEach(log => {
+                const cls = log.type === 'alert' ? 'monitor-alert' : 'monitor-status-ok';
+                html += `<div class="monitor-history-item ${cls}">
+                    <span>${formatTime(log.time)}</span>
+                    <span>${escapeHtml(log.msg)}</span>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        async function runMonitor() {
+            const domains = ($('monitorDomains')?.value || '').split('\n').map(d => d.trim()).filter(d => d);
+            if (!domains.length) {
+                showToast(state.lang === 'fa' ? 'لطفاً دامنه‌هایی برای مانیتورینگ وارد کنید' :
+                    'Please enter domains to monitor', 'warning');
+                return;
+            }
+            state.monitorDomains = domains;
+            const interval = +($('monitorInterval')?.value || 5) * 60000;
+            if (state.monitorTimer) { clearInterval(state.monitorTimer);
+                state.monitorTimer = null; }
+            showToast(t('monitor_started'), 'success');
+            $('startMonitorBtn').style.display = 'none';
+            $('stopMonitorBtn').style.display = 'inline-flex';
+            updateMonitorLog('🚀 مانیتورینگ شروع شد', 'info');
+
+            async function check() {
+                const config = {
+                    pingCount: +($('pingCount')?.value || 2),
+                    timeout: +($('timeoutSlider')?.value || 3000),
+                    interval: 100,
+                    retries: 0,
+                    minLat: +($('minLatency')?.value || 55),
+                    pathMode: ($('pingPaths')?.value || 'both'),
+                    concurrency: 2,
+                };
+                for (const domain of state.monitorDomains) {
+                    if (!domain.trim()) continue;
+                    try {
+                        const res = await scanDomain(domain.trim(), config);
+                        const old = state.monitorResults[domain] || 'unknown';
+                        if (old !== res.status) {
+                            const msg = t('monitor_alert').replace('{domain}', domain).replace('{old}', old).replace(
+                                '{new}', res.status);
+                            showToast(msg, 'warning');
+                            updateMonitorLog(msg, 'alert');
+                            state.monitorResults[domain] = res.status;
+                        } else {
+                            updateMonitorLog(`✅ ${domain} : ${res.status}`, 'ok');
+                        }
+                    } catch (_) {}
+                }
+            }
+            await check();
+            state.monitorTimer = setInterval(check, interval);
+        }
+
+        function stopMonitor() {
+            if (state.monitorTimer) { clearInterval(state.monitorTimer);
+                state.monitorTimer = null; }
+            $('startMonitorBtn').style.display = 'inline-flex';
+            $('stopMonitorBtn').style.display = 'none';
+            showToast(t('monitor_stopped'), 'info');
+            updateMonitorLog('⏹️ مانیتورینگ متوقف شد', 'info');
+        }
+
+        // ─── BATCH ──────────────────────────────────────────────────
+        async function batchPing() {
+            const domains = Array.from(state.selectedRows);
+            if (!domains.length) { showToast(t('select_domains'), 'warning'); return; }
+            showToast(t('batch_ping').replace('{count}', domains.length), 'info');
+            const config = {
+                pingCount: +($('pingCount')?.value || 2),
+                timeout: +($('timeoutSlider')?.value || 3000),
+                interval: 100,
+                retries: 0,
+                minLat: +($('minLatency')?.value || 55),
+                pathMode: ($('pingPaths')?.value || 'both'),
+                concurrency: 4,
+            };
+            for (const domain of domains) {
+                try {
+                    const res = await scanDomain(domain, config);
+                    const idx = state.results.findIndex(r => r.domain === domain);
+                    if (idx >= 0) state.results[idx] = res;
+                } catch (_) {}
+            }
+            scheduleRender();
+            showToast('✅ ' + (state.lang === 'fa' ? 'پینگ مجدد ' + domains.length + ' دامنه انجام شد' :
+                'Re-pinged ' + domains.length + ' domains'), 'success');
+        }
+
+        // ─── KEYBOARD SHORTCUTS ─────────────────────────────────────
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') { e.preventDefault();
+                runScan(); }
+            if (e.ctrlKey && e.key === '.') { e.preventDefault(); if (state.scanRunning) { stopAll();
+                    showToast('⏹️ ' + (state.lang === 'fa' ? 'متوقف شد' : 'Stopped'), 'warning');
+                    scheduleRender(); if ($('progressFill')) $('progressFill').style.width = '0%'; } }
+            if (e.ctrlKey && e.key === 'e') { e.preventDefault();
+                exportCSV(); }
+            if (e.ctrlKey && e.shiftKey && e.key === 'S') { e.preventDefault();
+                openModal('settingsModal');
+                applyTheme();
+                refreshProfileSelect(); }
+            if (e.ctrlKey && e.key === 'f') { e.preventDefault();
+                $('searchInput')?.focus(); }
+        });
+
+        // ─── CANVAS RESIZE ──────────────────────────────────────────
+        function resizeCharts(animate = true) {
+            ['pingChart', 'jitterChart'].forEach(id => {
+                const c = $(id);
+                if (!c) return;
+                const rect = c.parentElement.getBoundingClientRect();
+                const w = Math.max(rect.width - 12, 140);
+                const h = 70;
+                const dpr = window.devicePixelRatio || 1;
+                c.width = w * dpr;
+                c.height = h * dpr;
+                c.style.width = w + 'px';
+                c.style.height = h + 'px';
+                const ctx = c.getContext('2d');
+                ctx.scale(dpr, dpr);
+            });
+            drawCharts(animate);
+        }
+
+        // ─── INIT ────────────────────────────────────────────────────
+        applyTheme();
+        applyLanguage();
+        updateRepoSliders();
+        populateRepoSelect();
+        if ($('repoSelect') && state.repos[$('repoSelect').value]) {
+            loadRepoTextarea();
+        } else {
+            const keys = Object.keys(state.repos);
+            if (keys.length) {
+                $('repoSelect').value = keys[0];
+                loadRepoTextarea();
+            }
+        }
+        renderTable();
+        refreshProfileSelect();
+        checkConnectivity();
+        renderMonitorLog();
+
+        if (state.desktopNotify && 'Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+        if (state.scheduleMinutes > 0) {
+            state.scheduleTimer = setInterval(() => { if (!state.scanRunning) runScan(); }, state.scheduleMinutes *
+                60000);
+        }
+
+        // ─── EVENT BINDINGS ─────────────────────────────────────────
+
+        // Lang
+        $('langToggle')?.addEventListener('click', () => { state.lang = state.lang === 'fa' ? 'en' : 'fa';
+            applyLanguage(); });
+
+        // Theme
+        $('themeToggle')?.addEventListener('click', () => { state.theme = state.theme === 'dark' ? 'light' : 'dark';
+            applyTheme(); });
+
+        // Theme Preset
+        $('themePreset')?.addEventListener('change', function() {
+            const presetColors = { ocean: '#00b8ff', sunset: '#f77f00', forest: '#2d6a4f', neon: '#9d4edd',
+                gold: '#f4a261', midnight: '#6366f1' };
+            const color = presetColors[this.value] || '#00b8ff';
+            state.accent = color;
+            if ($('accentColor')) $('accentColor').value = color;
+            applyTheme();
+            resizeCharts(true);
+        });
+
+        // Sensor
+        $('sensorCheckBtn')?.addEventListener('click', () => { const b = $('sensorCheckBtn'); if (b) b.disabled = true;
+            checkConnectivity().finally(() => { if (b) b.disabled = false; }); });
+
+        // Start
+        $('startScanBtn')?.addEventListener('click', () => runScan());
+
+        // Pause
+        $('pauseResumeBtn')?.addEventListener('click', () => {
+            state.scanPaused = !state.scanPaused;
+            const btn = $('pauseResumeBtn');
+            if (btn) btn.textContent = state.scanPaused ? '▶️ ' + (state.lang === 'fa' ? 'ادامه' : 'Resume') :
+                '⏸️ ' + t('pause');
+        });
+
+        // Stop – کاملاً تضمین شده
+        $('stopScanBtn')?.addEventListener('click', () => {
+            stopAll();
+            showToast('⏹️ ' + (state.lang === 'fa' ? 'متوقف شد' : 'Stopped'), 'warning');
+            scheduleRender();
+            if ($('progressFill')) $('progressFill').style.width = '0%';
+        });
+
+        // Clear
+        $('clearResultsBtn')?.addEventListener('click', () => {
+            if (state.scanRunning) { showToast(t('err_scan'), 'warning'); return; }
+            state.results = [];
+            state.totalDomains = 0;
+            state.activeFilter = null;
+            state.selectedRows.clear();
+            state.chartNeedsFullAnimation = true;
+            scheduleRender();
+            if ($('progressFill')) $('progressFill').style.width = '0%';
+        });
+
+        // Quick
+        $('quickScanBtn')?.addEventListener('click', () => {
+            const top = ['google.com', 'cloudflare.com', 'github.com', 'youtube.com', 'facebook.com',
+                'amazon.com', 'wikipedia.org', 'reddit.com', 'twitter.com', 'instagram.com',
+                'linkedin.com', 'microsoft.com', 'apple.com', 'netflix.com', 'zoom.us'
+            ];
+            showToast(t('quick_scan_started'), 'info');
+            runScan(top);
+        });
+
+        // History
+        $('historyBtn')?.addEventListener('click', () => {
+            const list = $('historyList');
+            if (!list) return;
+            list.innerHTML = '';
+            if (!state.history.length) {
+                list.innerHTML =
+                    '<div style="text-align:center;padding:16px;color:var(--text-muted);">' + (state.lang ===
+                        'fa' ? 'تاریخچه‌ای ثبت نشده' : 'No history') + '</div>';
+            } else {
+                state.history.forEach((h, i) => {
+                    const div = document.createElement('div');
+                    div.className = 'history-item-detail';
+                    const dateStr = new Date(h.date).toLocaleString(state.lang === 'fa' ? 'fa-IR' :
+                        'en-US');
+                    div.innerHTML = `
+                        <div class="hdr">
+                            <span class="date">📅 ${dateStr}</span>
+                            <span>✅ ${h.results}/${h.total}</span>
+                        </div>
+                        <div class="stats">
+                            <span class="stat-badge">⏱️ ${Math.round(h.avgPing || 0)} ms</span>
+                            <span class="stat-badge">🚫 ${h.offline || 0} آفلاین/فیلتر</span>
+                        </div>
+                        <div class="actions">
+                            <button class="modal-btn" data-idx="${i}" style="font-size:0.50rem;padding:2px 8px;">🔄 اسکن مجدد</button>
+                            <button class="modal-btn modal-btn-danger" data-delidx="${i}" style="font-size:0.50rem;padding:2px 8px;">🗑️ حذف</button>
+                        </div>
+                    `;
+                    list.appendChild(div);
+                });
+                list.querySelectorAll('button[data-idx]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const idx = parseInt(btn.dataset.idx);
+                        if (state.history[idx]?.domains) {
+                            closeModal('historyModal');
+                            runScan(state.history[idx].domains);
+                        }
+                    });
+                });
+                list.querySelectorAll('button[data-delidx]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const idx = parseInt(btn.dataset.delidx);
+                        state.history.splice(idx, 1);
+                        saveHistory();
+                        openModal('historyModal');
+                    });
+                });
+            }
+            openModal('historyModal');
+        });
+        $('closeHistoryModal')?.addEventListener('click', () => closeModal('historyModal'));
+        $('clearHistoryBtn')?.addEventListener('click', () => { state.history = [];
+            saveHistory();
+            openModal('historyModal');
+            showToast(t('history_cleared'), 'success'); });
+        $('exportHistoryBtn')?.addEventListener('click', () => {
+            if (!state.history.length) { showToast(t('no_results'), 'warning'); return; }
+            const blob = new Blob([JSON.stringify(state.history, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `history_${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast(t('save_success'), 'success');
+        });
+
+        // Settings
+        $('settingsBtn')?.addEventListener('click', () => { openModal('settingsModal');
+            applyTheme();
+            refreshProfileSelect(); });
+        $('closeSettings')?.addEventListener('click', () => closeModal('settingsModal'));
+
+        // Repo modal
+        $('manageReposBtn')?.addEventListener('click', () => { populateRepoSelect();
+            loadRepoTextarea();
+            openModal('repoModal'); });
+        $('closeRepoModal')?.addEventListener('click', () => closeModal('repoModal'));
+        $('repoSelect')?.addEventListener('change', loadRepoTextarea);
+
+        $('saveRepoChanges')?.addEventListener('click', () => {
+            const key = ($('repoSelect')?.value);
+            const ta = $('repoTextarea');
+            if (!key || !ta) return;
+            const lines = ta.value.split('\n').map(d => d.trim()).filter(d => d);
+            state.repos[key] = lines;
+            saveRepos();
+            loadRepoTextarea();
+            updateRepoSliders();
+            showToast(t('repo_saved'), 'success');
+        });
+
+        $('repoAddBtn')?.addEventListener('click', () => {
+            const key = ($('repoSelect')?.value);
+            const input = $('repoAddInput');
+            if (!key || !input) return;
+            const domain = input.value.trim();
+            if (!domain) { showToast(state.lang === 'fa' ? 'لطفاً دامنه را وارد کنید' :
+                'Please enter a domain', 'warning'); return; }
+            if (!state.repos[key]) state.repos[key] = [];
+            state.repos[key].push(domain);
+            saveRepos();
+            loadRepoTextarea();
+            updateRepoSliders();
+            input.value = '';
+            showToast('✅ ' + (state.lang === 'fa' ? 'دامنه افزوده شد' : 'Domain added'), 'success');
+        });
+
+        $('repoSortBtn')?.addEventListener('click', () => {
+            const key = ($('repoSelect')?.value);
+            if (!key) return;
+            if (!state.repos[key]) return;
+            state.repos[key].sort((a, b) => a.localeCompare(b));
+            saveRepos();
+            loadRepoTextarea();
+            updateRepoSliders();
+            showToast('🔤 ' + (state.lang === 'fa' ? 'مرتب‌سازی شد' : 'Sorted'), 'success');
+        });
+
+        $('repoDedupBtn')?.addEventListener('click', () => {
+            const key = ($('repoSelect')?.value);
+            if (!key) return;
+            if (!state.repos[key]) return;
+            state.repos[key] = [...new Set(state.repos[key])];
+            saveRepos();
+            loadRepoTextarea();
+            updateRepoSliders();
+            showToast('🧹 ' + (state.lang === 'fa' ? 'حذف تکراری انجام شد' : 'Deduplicated'), 'success');
+        });
+
+        $('repoClearAllBtn')?.addEventListener('click', () => {
+            const key = ($('repoSelect')?.value);
+            if (!key) return;
+            if (!confirm(state.lang === 'fa' ? `همه دامنه‌های مخزن "${key}" پاک شوند؟` :
+                    `Clear all domains in "${key}"?`)) return;
+            state.repos[key] = [];
+            saveRepos();
+            loadRepoTextarea();
+            updateRepoSliders();
+            showToast('🗑️ ' + (state.lang === 'fa' ? 'همه دامنه‌ها پاک شدند' : 'All domains cleared'), 'info');
+        });
+
+        $('importRepoBtn')?.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json,.txt';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    try {
+                        const key = ($('repoSelect')?.value);
+                        if (!key) return;
+                        let data;
+                        if (file.name.endsWith('.json')) data = JSON.parse(ev.target.result);
+                        else data = ev.target.result.split('\n').map(l => l.trim()).filter(l => l);
+                        if (Array.isArray(data)) { state.repos[key] = data;
+                            saveRepos();
+                            loadRepoTextarea();
+                            updateRepoSliders();
+                            showToast(t('import_success'), 'success'); } else showToast(t(
+                            'import_error'), 'error');
+                    } catch (_) { showToast(t('import_error'), 'error'); }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        });
+        $('exportRepoBtn')?.addEventListener('click', () => {
+            const key = ($('repoSelect')?.value);
+            if (!key) return;
+            const data = state.repos[key] || [];
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `repo_${key}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+        $('resetDefaultRepoBtn')?.addEventListener('click', () => {
+            const key = ($('repoSelect')?.value);
+            if (!key) return;
+            if (DEFAULT_REPOS[key]) { state.repos[key] = [...DEFAULT_REPOS[key]];
+                saveRepos();
+                loadRepoTextarea();
+                updateRepoSliders();
+                showToast(t('repo_saved'), 'success'); } else showToast(state.lang === 'fa' ?
+                'پیش‌فرضی وجود ندارد' : 'No default', 'warning');
+        });
+        $('newRepoBtn')?.addEventListener('click', () => {
+            const name = prompt(t('repo_name') + ':');
+            if (!name || !name.trim()) return;
+            const key = name.trim().toLowerCase().replace(/\s+/g, '_');
+            if (state.repos[key]) { showToast(t('profile_exists'), 'error'); return; }
+            state.repos[key] = [];
+            saveRepos();
+            populateRepoSelect();
+            if ($('repoSelect')) $('repoSelect').value = key;
+            loadRepoTextarea();
+            updateRepoSliders();
+            showToast(t('repo_saved'), 'success');
+        });
+
+        // Repo chips
+        document.querySelectorAll('.repo-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                const repo = chip.dataset.repo;
+                if (state.selectedRepos.has(repo)) state.selectedRepos.delete(repo);
+                else state.selectedRepos.add(repo);
+                chip.classList.toggle('checked');
+                updateRepoSliders();
+            });
+        });
+
+        // Sliders
+        $('domainLimitSlider')?.addEventListener('input', () => {
+            state.domainLimit = +$('domainLimitSlider').value;
+            const dlv = $('domainLimitValue');
+            if (dlv) dlv.textContent = state.domainLimit;
+        });
+        $('concurrencySlider')?.addEventListener('input', () => {
+            const cv = $('concurrencyValue');
+            if (cv) cv.textContent = $('concurrencySlider').value;
+        });
+        $('timeoutSlider')?.addEventListener('input', () => {
+            const tv = $('timeoutValue');
+            if (tv) tv.textContent = $('timeoutSlider').value;
+        });
+
+        // Search & sort
+        $('searchInput')?.addEventListener('input', scheduleRender);
+        $('sortSelect')?.addEventListener('change', scheduleRender);
+
+        // Table toolbar
+        $('exportCsvBtn')?.addEventListener('click', exportCSV);
+        $('exportJsonBtn')?.addEventListener('click', saveResultsToFile);
+        $('exportPdfBtn')?.addEventListener('click', exportPDF);
+
+        $('filterOnlineBtn')?.addEventListener('click', () => {
+            state.activeFilter = state.activeFilter === 'online' ? null : 'online';
+            scheduleRender();
+        });
+        $('filterSlowBtn')?.addEventListener('click', () => {
+            state.activeFilter = state.activeFilter === 'slow' ? null : 'slow';
+            scheduleRender();
+        });
+        $('selectAllBtn')?.addEventListener('click', () => {
+            const all = state.results.map(r => r.domain);
+            if (state.selectedRows.size === all.length) state.selectedRows.clear();
+            else all.forEach(d => state.selectedRows.add(d));
+            renderTable();
+        });
+        $('batchPingBtn')?.addEventListener('click', batchPing);
+
+        // Settings tabs
+        document.querySelectorAll('.settings-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.settings-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.settings-section').forEach(s => s.classList.remove(
+                'active'));
+                tab.classList.add('active');
+                const target = document.getElementById('section-' + tab.dataset.tab);
+                if (target) target.classList.add('active');
+            });
+        });
+
+        // Save settings
+        $('saveQuitSettings')?.addEventListener('click', () => {
+            state.accent = ($('accentColor')?.value || state.accent);
+            state.animSpeed = +($('animSpeedSlider')?.value || 1);
+            state.toastDuration = +($('toastDuration')?.value || 3);
+            state.tableDensity = +($('tableDensity')?.value || 1);
+            state.vibrate = !!($('vibrateCheck')?.checked);
+            state.sound = !!($('soundCheck')?.checked);
+            state.autoSave = !!($('autoSaveCheck')?.checked);
+            state.desktopNotify = !!($('desktopNotifyCheck')?.checked);
+            state.useWorker = !!($('useWorker')?.checked);
+            state.bulkScan = !!($('bulkScan')?.checked);
+            state.sslCheck = !!($('sslCheck')?.checked);
+            state.scheduleMinutes = +($('scheduleMinutes')?.value || 0);
+            state.maxHistory = +($('maxHistory')?.value || 50);
+            state.pageSize = +($('pageSize')?.value || 150);
+            state.dnsResolver = ($('dnsResolver')?.value || 'auto');
+            if (state.desktopNotify && 'Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+            if (state.scheduleMinutes > 0 && !state.scheduleTimer) {
+                state.scheduleTimer = setInterval(() => { if (!state.scanRunning) runScan(); }, state
+                    .scheduleMinutes * 60000);
+            } else if (state.scheduleMinutes === 0 && state.scheduleTimer) {
+                clearInterval(state.scheduleTimer);
+                state.scheduleTimer = null;
+            }
+            applyTheme();
+            resizeCharts(true);
+            closeModal('settingsModal');
+            showToast(t('settings_saved'), 'success');
+        });
+
+        // Profiles
+        $('saveProfileBtn')?.addEventListener('click', () => {
+            const name = prompt(state.lang === 'fa' ? 'نام پروفایل:' : 'Profile name:');
+            if (!name || !name.trim()) return;
+            const profiles = getProfiles();
+            const snapshot = {
+                accent: state.accent,
+                animSpeed: state.animSpeed,
+                toastDuration: state.toastDuration,
+                tableDensity: state.tableDensity,
+                vibrate: state.vibrate,
+                sound: state.sound,
+                autoSave: state.autoSave,
+                desktopNotify: state.desktopNotify,
+                theme: state.theme,
+                lang: state.lang,
+                pingCount: ($('pingCount')?.value || 4),
+                timeout: ($('timeoutSlider')?.value || 3000),
+                pingInterval: ($('pingInterval')?.value || 200),
+                retryCount: ($('retryCount')?.value || 2),
+                lossThreshold: ($('lossThreshold')?.value || 20),
+                jitterStable: ($('jitterStable')?.value || 50),
+                minLatency: ($('minLatency')?.value || 55),
+                pingPaths: ($('pingPaths')?.value || 'both'),
+            };
+            profiles[name.trim()] = snapshot;
+            saveProfiles(profiles);
+            refreshProfileSelect();
+            showToast(t('profile_saved'), 'success');
+        });
+        $('loadProfileBtn')?.addEventListener('click', () => {
+            const name = ($('profileSelect')?.value);
+            if (!name) { showToast(state.lang === 'fa' ? 'لطفاً یک پروفایل انتخاب کنید' :
+                    'Please select a profile', 'warning'); return; }
+            const profiles = getProfiles();
+            const p = profiles[name];
+            if (!p) { showToast(state.lang === 'fa' ? 'پروفایل یافت نشد' : 'Profile not found', 'error'); return; }
+            Object.assign(state, p);
+            if ($('pingCount')) $('pingCount').value = p.pingCount || 4;
+            if ($('timeoutSlider')) $('timeoutSlider').value = p.timeout || 3000;
+            if ($('pingInterval')) $('pingInterval').value = p.pingInterval || 200;
+            if ($('retryCount')) $('retryCount').value = p.retryCount || 2;
+            if ($('lossThreshold')) $('lossThreshold').value = p.lossThreshold || 20;
+            if ($('jitterStable')) $('jitterStable').value = p.jitterStable || 50;
+            if ($('minLatency')) $('minLatency').value = p.minLatency || 55;
+            if ($('pingPaths')) $('pingPaths').value = p.pingPaths || 'both';
+            applyTheme();
+            applyLanguage();
+            resizeCharts(true);
+            showToast(t('profile_loaded'), 'success');
+        });
+        $('deleteProfileBtn')?.addEventListener('click', () => {
+            const name = ($('profileSelect')?.value);
+            if (!name) { showToast(state.lang === 'fa' ? 'لطفاً یک پروفایل انتخاب کنید' :
+                    'Please select a profile', 'warning'); return; }
+            const profiles = getProfiles();
+            delete profiles[name];
+            saveProfiles(profiles);
+            refreshProfileSelect();
+            showToast(t('profile_deleted'), 'success');
+        });
+        $('resetAllSettingsBtn')?.addEventListener('click', () => {
+            if (!confirm(t('reset_confirm'))) return;
+            localStorage.clear();
+            location.reload();
+        });
+        $('exportSettingsBtn')?.addEventListener('click', () => {
+            const settings = {
+                state: { accent: state.accent, animSpeed: state.animSpeed, toastDuration: state
+                        .toastDuration, tableDensity: state.tableDensity, vibrate: state.vibrate,
+                    sound: state.sound, autoSave: state.autoSave, desktopNotify: state
+                        .desktopNotify, theme: state.theme, lang: state.lang },
+                dom: { pingCount: ($('pingCount')?.value), timeout: ($('timeoutSlider')?.value),
+                    pingInterval: ($('pingInterval')?.value), retryCount: ($('retryCount')
+                        ?.value), lossThreshold: ($('lossThreshold')?.value), jitterStable: ($(
+                        'jitterStable')?.value), minLatency: ($('minLatency')?.value),
+                    pingPaths: ($('pingPaths')?.value) },
+                profiles: getProfiles(),
+                repos: state.repos,
+            };
+            const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `sni_settings_${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast(state.lang === 'fa' ? 'تنظیمات اکسپورت شد' : 'Settings exported', 'success');
+        });
+        $('importSettingsBtn')?.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    try {
+                        const settings = JSON.parse(ev.target.result);
+                        if (settings.state) Object.assign(state, settings.state);
+                        if (settings.dom) { for (const [k, v] of Object.entries(settings.dom)) {
+                                const el = $(k); if (el) el.value = v; } }
+                        if (settings.profiles) saveProfiles(settings.profiles);
+                        if (settings.repos) { state.repos = settings.repos;
+                            saveRepos();
+                            updateRepoSliders(); }
+                        applyTheme();
+                        applyLanguage();
+                        refreshProfileSelect();
+                        resizeCharts(true);
+                        showToast(t('import_success'), 'success');
+                    } catch (_) { showToast(t('import_error'), 'error'); }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        });
+
+        // Monitor
+        $('monitorBtn')?.addEventListener('click', () => {
+            const ta = $('monitorDomains');
+            if (ta) ta.value = state.monitorDomains.join('\n');
+            renderMonitorLog();
+            openModal('monitorModal');
+        });
+        $('closeMonitorModal')?.addEventListener('click', () => closeModal('monitorModal'));
+        $('startMonitorBtn')?.addEventListener('click', runMonitor);
+        $('stopMonitorBtn')?.addEventListener('click', stopMonitor);
+        $('clearMonitorLogBtn')?.addEventListener('click', () => {
+            state.monitorLogs = [];
+            renderMonitorLog();
+            showToast(state.lang === 'fa' ? 'لاگ پاک شد' : 'Log cleared', 'success');
+        });
+
+        // Keyboard hint toggle
+        $('kbdToggle')?.addEventListener('click', () => {
+            const hint = $('kbdHint');
+            if (hint) hint.classList.toggle('show');
+        });
+
+        // Canvas resize
+        window.addEventListener('resize', () => { resizeCharts(true); });
+        window.addEventListener('load', () => { setTimeout(() => resizeCharts(true), 200); });
+
+        console.log('✅ SNI Scanner Pro v1.0.2 — Final version ready for public release.');
+    })();
+</script>
+</body>
+</html>
