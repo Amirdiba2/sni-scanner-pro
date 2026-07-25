@@ -5,7 +5,7 @@
 <p align="center">
   <!-- Animated SVG Banner with Typewriter Effect -->
   <a href="https://github.com/its-thesaz">
-    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=32&pause=1000&color=8B5CF6&center=true&vCenter=true&width=700&height=70&lines=SNI+Scanner+Pro;Professional+Network+Scanner;Live+Benchmarking+Tool;v1.0.2" alt="Typing SVG" />
+    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=32&pause=1000&color=8B5CF6&center=true&vCenter=true&width=700&height=70&lines=SNI+Scanner+Pro;Professional+Network+Scanner;Live+Benchmarking+Tool;v1.0.4" alt="Typing SVG" />
   </a>
 </p>
 
